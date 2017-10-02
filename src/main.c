@@ -3,8 +3,6 @@
  * 
  * Reemplaza el interruptor del timer por nuestra funcion
  * la cual muestra la hora actual cada N ticks del timer.
- *
- *
  */
 #include "dos.h"
 #include <graphics.h>
@@ -120,7 +118,6 @@ void interrupt new_timer_function1(void){
   /* ejecutamos el codigo original del handler*/
   old_timer_function();
 }
-
 void show_current_time(void){
     /* estructura para guardar el tiempo actual, definido dentro de dos.h */
     struct time t;
@@ -130,7 +127,6 @@ void show_current_time(void){
     /*imprime la hora actual*/
     printf("Time: %d:%d:%d\n", t.ti_hour, t.ti_min, t.ti_sec);
 }
-
 void show_hello_world(void){
     while(1){
     clrscr();
@@ -153,7 +149,7 @@ int main(void){
    * funcion original al timer*/
   /* ademas al presionar la tecla EXIT_KEY (escape)  termina la ejecucion */
   while(!kbhit() && (getch() != EXIT_KEY)){};
-
+  
   /*regresa la funcion original a la direccion del timer*/
   setvect(TIMER_ADDRESS, old_timer_function);
   return 0;
