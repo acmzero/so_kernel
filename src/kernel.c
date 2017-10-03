@@ -1,5 +1,5 @@
 /*
- * autores Heli, Roberto
+ * autores Heli Villarreal, Roberto Mieres
  * Reemplaza el interrupt handler del timer 
  * por nuestra implementacion para poder simular
  * multitareas
