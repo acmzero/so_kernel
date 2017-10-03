@@ -119,21 +119,25 @@ void proceso_1(){
 
 /*mostrar hora */
 void proceso_2(){
+  int c_sec = -1;
   while(1){
     struct time t;
     char *f_time;
-    int x,y;
+    int x,y, sec;
     gettime(&t);
-
-    f_time = (char*) malloc( 15*sizeof(char));
-    sprintf(f_time, "Time: %d:%d:%d", t.ti_hour, t.ti_min, t.ti_sec);
-    x = 10;
-    y = 10;
-    disable();
-    set_viewport(1);
-    outtextxy( x, y, f_time);
-    enable();
-    delay(100);
+    sec = (int)t.ti_sec;
+    if(c_sec!=sec){
+      c_sec = sec;
+      f_time = (char*) malloc( 15*sizeof(char));
+      sprintf(f_time, "Time: %d:%d:%d", t.ti_hour, t.ti_min, t.ti_sec);
+      x = 10;
+      y = 10;
+      disable();
+      set_viewport(1);
+      outtextxy( x, y, f_time);
+      enable();
+      delay(100);
+    }
   }
 }
 /*mostrar mensaje random */
@@ -143,17 +147,20 @@ void proceso_3(){
     "this is the same length   .",
     "hoy me fue bien en el examen :)"
   };
+  int c_sec = -1;
   while(1){
-  struct time t;
-  int count, n;
-  gettime(&t);
-  count = (int)t.ti_sec;
-  n = 3;
-  disable();
-  set_viewport(2);
-  outtextxy(10,10, messages[count%n]);
-  enable();
-  delay(100);
+    struct time t;
+    int count, n;
+    gettime(&t);
+    count = (int)t.ti_sec;
+    n = 3;
+    if(c_sec!=count){
+      disable();
+      c_sec = count;
+      set_viewport(2);
+      outtextxy(10,10, messages[count%n]);
+      enable();
+    }
   }
 }
 void proceso_4(){
@@ -172,11 +179,16 @@ int first_run = 0;
 int tick_count =0;
 int turn = 0;
 PCB *get_next(){
+  int n = 2;
   turn +=1;
-  if(turn%2==0){
+  turn = turn%n;
+  if(turn==0){
     return &pcbs[1];
   }
-  return &pcbs[2];
+  if(turn==1){
+    return &pcbs[2];
+  }
+  return &pcbs[9];
 }
 PCB *torun;
 void interrupt timer_handler_new(){
