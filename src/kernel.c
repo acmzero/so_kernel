@@ -3,9 +3,13 @@
 #include <alloc.h>
 
 #define TIMER_INT 0x8
+#define STACK_SIZE 2048
 
+typedef void (*job);
+typedef void(*jobptr)();
 void interrupt (*timer_handler_old)();
 void interrupt timer_handler_new();
+void init_job(void(*job)(void), int n);
 
 void proceso_1();
 void proceso_2();
@@ -18,7 +22,41 @@ typedef struct {
 } point;
 
 
+typedef enum  {
+  READY,
+  RUNNING,
+  WAITING
+} PSTATE;
+typedef struct 
+{
+	unsigned bp, 
+		 di, 
+		 si, 
+		 ds, 
+                 es,
+                 dx, 
+                 cx, 
+                 bx, 
+                 ax,
+                 ip, 
+                 cs, 
+                 flags;
+} regs;
+typedef struct {
+  int id;
+  char *name;
+  unsigned ss;
+  unsigned sp;
+  PSTATE state;
+  char stack[STACK_SIZE];
+  char dummy;
+  char dummy2;
+} PCB;
+
 point *off_points; 
+PCB *pcbs;
+PCB *running;
+PCB *waiting;
 void set_off_point(int n, int x, int y, int max_x, int max_y){
   point *p = &off_points[n];
   p->x = x+1;
@@ -31,7 +69,10 @@ void proceso_4();
 void initialize(){
   int  gd = DETECT, gm;
   int x,y, m_x, m_y;
+  running = NULL;
+  waiting = NULL;
   off_points = (point*) malloc(4*sizeof(point));
+  pcbs = (PCB*) malloc(10*sizeof(PCB));
   initgraph(&gd,&gm,"o:\\tc\\bgi");
   x = getmaxx();
   y = getmaxy();
@@ -46,68 +87,54 @@ void initialize(){
   line(m_x,0,m_x,y);
   line(0,m_y, x,m_y);
 
-
+  init_job(&proceso_1, 0);
+  init_job(&proceso_2, 1);
+  init_job(&proceso_3, 2);
+  running = &pcbs[0];
+  waiting = &pcbs[1];
 }
 
 int main(void){
-  int count = 0;
-  int out_loop = 1;
   initialize();
 
   timer_handler_old = getvect(TIMER_INT);
   setvect(TIMER_INT, timer_handler_new);
 
-
-
-  while(out_loop){
-    set_viewport(count%4);
-    if(count%4 == 0){
-      proceso_1();
-    }
-    if(count%4 == 1){
-      proceso_2();
-    }
-    if(count%4 == 2){
-      proceso_3();
-    }
-    if(count%4 == 3){
-      proceso_4();
-    }
-
-    count = count + 1;
-    if(kbhit() && (getch() == 0x1B)){
-      out_loop = 0;
-    }
-  };
+  outtextxy(10, 20, "main");
+  getch();
   setvect(TIMER_INT, timer_handler_old);
   return 0;
 }
 /* i'm going to use this first process for testing */
 void proceso_1(){
-  int x = _SS, xp;
-  char *s = (char*) malloc(30*sizeof(char));
-  char *p;
-  sprintf(s, "%d", x);
-  p = (char*) malloc(30*sizeof(char));
-  xp = _SP;
-  sprintf(p, "%d", xp);
-  outtextxy(10,30, s);
-  outtextxy(10,40, p);
+  while(1){
+  disable();
+  set_viewport(0);
+  outtextxy(10,30, "snthaoeu");
+  outtextxy(10,40, "snthaoeu");
+  enable();
+  delay(100);
+  }
 }
 
 /*mostrar hora */
 void proceso_2(){
-  struct time t;
-  char *f_time;
-  int x,y;
-  gettime(&t);
+  while(1){
+    struct time t;
+    char *f_time;
+    int x,y;
+    gettime(&t);
 
-  f_time = (char*) malloc( 15*sizeof(char));
-  sprintf(f_time, "Time: %d:%d:%d", t.ti_hour, t.ti_min, t.ti_sec);
-  x = 10;
-  y = 10;
-  outtextxy( x, y, f_time);
-  proceso_1();
+    f_time = (char*) malloc( 15*sizeof(char));
+    sprintf(f_time, "Time: %d:%d:%d", t.ti_hour, t.ti_min, t.ti_sec);
+    x = 10;
+    y = 10;
+    disable();
+    set_viewport(1);
+    outtextxy( x, y, f_time);
+    enable();
+    delay(100);
+  }
 }
 /*mostrar mensaje random */
 void proceso_3(){
@@ -116,13 +143,18 @@ void proceso_3(){
     "this is the same length   .",
     "hoy me fue bien en el examen :)"
   };
+  while(1){
   struct time t;
   int count, n;
   gettime(&t);
   count = (int)t.ti_sec;
   n = 3;
+  disable();
+  set_viewport(2);
   outtextxy(10,10, messages[count%n]);
-  proceso_1();
+  enable();
+  delay(100);
+  }
 }
 void proceso_4(){
   outtextxy(10,10, "proceso 4");
@@ -132,9 +164,52 @@ void proceso_4(){
 void set_viewport(int n){
   point *p = &off_points[n];
   setviewport(p->x, p->y, p->max_x, p->max_y, 1);
+  setfillstyle(SOLID_FILL, BLACK);
   clearviewport();
 }
+PCB *aux;
+int first_run = 0;
+int tick_count =0;
+int turn = 0;
+PCB *get_next(){
+  turn +=1;
+  if(turn%2==0){
+    return &pcbs[1];
+  }
+  return &pcbs[2];
+}
+PCB *torun;
 void interrupt timer_handler_new(){
+  disable();
+  if(first_run){
+    torun->ss = _SS;
+    torun->sp = _SP;
+    torun->state = READY;
+  }
+  
+  torun = get_next();
 
+  _SS = torun->ss;
+  _SP = torun->sp;
+  torun->state = RUNNING;
+  if(!first_run){
+    first_run = 1;
+  }
   timer_handler_old();
+  enable();
+}
+void init_job(jobptr j, int n){
+  PCB *pcb = &pcbs[n];
+  regs *ct = (regs*) pcb->stack + STACK_SIZE - sizeof(regs);
+
+  pcb->id = n;
+  pcb->state = READY;
+  pcb->ss=FP_SEG((regs far *) ct);
+  pcb->sp=FP_OFF((regs far *) ct);
+
+  ct->ds = _DS;
+  ct->es = _ES;
+  ct->cs = FP_SEG(j);
+  ct->ip = FP_OFF(j);
+  ct->flags = 0x200;
 }
