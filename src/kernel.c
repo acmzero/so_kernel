@@ -1,3 +1,9 @@
+/*
+ * autores Heli, Roberto
+ * Reemplaza el interrupt handler del timer 
+ * por nuestra implementacion para poder simular
+ * multitareas
+ */
 #include <graphics.h>
 #include <dos.h>
 #include <alloc.h>
@@ -14,11 +20,13 @@ void init_job(void(*job)(void), int n);
 void proceso_1();
 void proceso_2();
 void proceso_3();
+void proceso_exit();
 void set_viewport(int n);
 
 typedef struct {
   int x,y;
   int max_x, max_y;
+  int d_x, d_y;
 } point;
 
 
@@ -54,18 +62,27 @@ typedef struct {
 } PCB;
 
 point *off_points; 
+int current_view;
+/* array para cola de procesos */
 PCB *pcbs;
 PCB *running;
 PCB *waiting;
+
+/* utileria para inicializar puntos y rectangulos en pantalla */
 void set_off_point(int n, int x, int y, int max_x, int max_y){
   point *p = &off_points[n];
   p->x = x+1;
   p->y = y+1;
   p->max_x = max_x-1;
   p->max_y = max_y-1;
+  p->d_x = p->max_x-p->x;
+  p->d_y = p->max_y-p->y;
 }
 void proceso_4();
 
+/*
+ * Inicializa la pantalla, procesos y PCB a ejecutar
+ */
 void initialize(){
   int  gd = DETECT, gm;
   int x,y, m_x, m_y;
@@ -90,10 +107,12 @@ void initialize(){
   init_job(&proceso_1, 0);
   init_job(&proceso_2, 1);
   init_job(&proceso_3, 2);
+  init_job(&proceso_exit, 9);
   running = &pcbs[0];
   waiting = &pcbs[1];
 }
 
+/* codigo principal que reemplaza el interrupt handler del timer */
 int main(void){
   initialize();
 
@@ -105,19 +124,18 @@ int main(void){
   setvect(TIMER_INT, timer_handler_old);
   return 0;
 }
-/* i'm going to use this first process for testing */
+
+/* 'pelota' rebotando en su cuadrante */
 void proceso_1(){
   while(1){
   disable();
   set_viewport(0);
-  outtextxy(10,30, "snthaoeu");
-  outtextxy(10,40, "snthaoeu");
   enable();
   delay(100);
   }
 }
 
-/*mostrar hora */
+/* mostrar hora */
 void proceso_2(){
   int c_sec = -1;
   while(1){
@@ -140,7 +158,7 @@ void proceso_2(){
     }
   }
 }
-/*mostrar mensaje random */
+/* mostrar mensaje random */
 void proceso_3(){
   char *messages[] = {
     "This is a fixed length text",
@@ -163,13 +181,16 @@ void proceso_3(){
     }
   }
 }
+
+/* por implementar */
 void proceso_4(){
   outtextxy(10,10, "proceso 4");
   proceso_1();
 }
-
+/* cambia el offset de impresion de pantalla por alguno de los cuadros */
 void set_viewport(int n){
   point *p = &off_points[n];
+  current_view = n;
   setviewport(p->x, p->y, p->max_x, p->max_y, 1);
   setfillstyle(SOLID_FILL, BLACK);
   clearviewport();
@@ -179,7 +200,7 @@ int first_run = 0;
 int tick_count =0;
 int turn = 0;
 PCB *get_next(){
-  int n = 2;
+  int n = 3;
   turn +=1;
   turn = turn%n;
   if(turn==0){
@@ -191,9 +212,12 @@ PCB *get_next(){
   return &pcbs[9];
 }
 PCB *torun;
+/* nuevo interrupt handler del timer */
 void interrupt timer_handler_new(){
   disable();
+  /* ignora primer _SS y _SP correspondientes a main */
   if(first_run){
+    /* guarda SS y SP del proceso en ejecucion */
     torun->ss = _SS;
     torun->sp = _SP;
     torun->state = READY;
@@ -201,6 +225,7 @@ void interrupt timer_handler_new(){
   
   torun = get_next();
 
+  /* asigna SS y SP del nuevo proceso */
   _SS = torun->ss;
   _SP = torun->sp;
   torun->state = RUNNING;
@@ -224,4 +249,16 @@ void init_job(jobptr j, int n){
   ct->cs = FP_SEG(j);
   ct->ip = FP_OFF(j);
   ct->flags = 0x200;
+}
+
+/* se perdio SS y SP de main, emular main en un nuevo proceso */
+void proceso_exit(){
+  while(1){
+    if(kbhit()){
+      if(getch() == 0x1B){
+        setvect(TIMER_INT, timer_handler_old);
+        exit(1);
+      }
+    }
+  }
 }
