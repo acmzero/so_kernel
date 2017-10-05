@@ -33,7 +33,9 @@ typedef struct {
 typedef enum  {
   READY,
   RUNNING,
-  WAITING
+  WAITING,
+  TERMINATED
+  
 } PSTATE;
 typedef struct 
 {
@@ -75,8 +77,8 @@ void set_off_point(int n, int x, int y, int max_x, int max_y){
   p->y = y+1;
   p->max_x = max_x-1;
   p->max_y = max_y-1;
-  p->d_x = p->max_x-p->x;
-  p->d_y = p->max_y-p->y;
+  p->d_x = p->max_x-p->x-5;
+  p->d_y = p->max_y-p->y-10;
 }
 void proceso_4();
 
@@ -107,6 +109,7 @@ void initialize(){
   init_job(&proceso_1, 0);
   init_job(&proceso_2, 1);
   init_job(&proceso_3, 2);
+  init_job(&proceso_4, 3);
   init_job(&proceso_exit, 9);
   running = &pcbs[0];
   waiting = &pcbs[1];
@@ -119,19 +122,91 @@ int main(void){
   timer_handler_old = getvect(TIMER_INT);
   setvect(TIMER_INT, timer_handler_new);
 
-  outtextxy(10, 20, "main");
   getch();
   setvect(TIMER_INT, timer_handler_old);
   return 0;
 }
 
+
 /* 'pelota' rebotando en su cuadrante */
+typedef struct {
+  point p;
+  int clockwise;
+  int direction;
+  char c;
+} ball;
+
+void move_ball(ball *b, point limit){
+  int mx, my;
+  int ax, ay;
+  char str[32];
+  int speed = 7;
+  point p = b->p;
+  if(b->direction == 0){
+    mx =  speed;
+    my = speed;
+  }
+  if(b->direction == 1){
+    mx = -1*speed;
+    my = speed;
+  }
+  if(b->direction == 2){
+    mx = -1*speed;
+    my = -1*speed;
+  }
+  if(b->direction == 3){
+    mx = 1*speed;
+    my = -1*speed;
+  }
+  ax = b->p.x + mx;
+  ay = b->p.y + my;
+
+  sprintf(str,"%d %d %d %d %d %d", ax, ay , b->p.x,b->p.y, limit.d_x, limit.d_y);
+  /*outtextxy(b->p.x, b->p.y, str); */
+  if(ax>= limit.d_x || ax<0
+      || ay >= limit.d_y || ay < 0){
+    /* movement not possible because is off screen */
+    /* new movement depends on clockwise */
+    b->direction = (b->direction+b->clockwise)%4;
+    if(b->direction<0){
+      b->direction=3;
+    }
+    move_ball(b, limit);
+  }else{
+    /* movement possible, erase previous char and put new x,y,char */
+    sprintf(str,"%c", b->c);
+    setfillstyle(SOLID_FILL, BLACK);
+    setcolor(BLACK);
+    /*bar(p.x, p.y, p.x+10, p.y+10); */
+    outtextxy(b->p.x, b->p.y, str);
+    setcolor(WHITE);
+
+    b->p.x = ax;
+    b->p.y = ay;
+    outtextxy(b->p.x, b->p.y, str);
+  }
+}
 void proceso_1(){
+  ball *b1=malloc(sizeof(ball));
+  ball *b2 = malloc(sizeof(ball));
+  b1->p.x=30;
+  b1->p.y=55;
+  b1->clockwise = 1;
+  b1->c = '0';
+  b1->direction = 1;
+  b2->p.x=50;
+  b2->p.y=73;
+  b2->clockwise = -1;
+  b2->c = '0';
+  b2->direction = 1;
+
   while(1){
-  disable();
-  set_viewport(0);
-  enable();
-  delay(100);
+    disable();
+    set_viewport(0);
+    move_ball(b1, off_points[0]);
+    move_ball(b2, off_points[0]);
+    enable();
+    delay(1);
   }
 }
 
@@ -147,14 +222,15 @@ void proceso_2(){
     if(c_sec!=sec){
       c_sec = sec;
       f_time = (char*) malloc( 15*sizeof(char));
-      sprintf(f_time, "Time: %d:%d:%d", t.ti_hour, t.ti_min, t.ti_sec);
+      sprintf(f_time, "Time: %02d:%02d:%02d", t.ti_hour, t.ti_min, t.ti_sec);
       x = 10;
       y = 10;
       disable();
       set_viewport(1);
+      bar(x,y,200,200);
       outtextxy( x, y, f_time);
       enable();
-      delay(100);
+      delay(1);
     }
   }
 }
@@ -176,6 +252,7 @@ void proceso_3(){
       disable();
       c_sec = count;
       set_viewport(2);
+      bar(10,10,300,100);
       outtextxy(10,10, messages[count%n]);
       enable();
     }
@@ -184,8 +261,49 @@ void proceso_3(){
 
 /* por implementar */
 void proceso_4(){
-  outtextxy(10,10, "proceso 4");
-  proceso_1();
+  char mat[40][40], c, str[2];
+  point p;
+  int text_size = 10;
+  int first_done = 0;
+  p.x=0;
+  p.y=0;
+  while(1){
+    if(kbhit() && (c =getch())!= 0x1B){
+      disable();
+      set_viewport(3);
+      if(c==0x8){
+        p.x--;
+        if(p.x<0){
+          p.x=32;
+          p.y--;
+        }
+        if(p.y<0){
+          p.y=23;
+        }
+      }
+      if(first_done || c==0x8){
+        setcolor(BLACK);
+        sprintf(str, "%c", mat[p.x][p.y]);
+        outtextxy(p.x*text_size,p.y*text_size, str);
+        setcolor(WHITE);
+      }
+      if(c!=0x8){
+        sprintf(str, "%c", c);
+        outtextxy(p.x*text_size,p.y*text_size, str);
+        mat[p.x][p.y] = c;
+        p.x++;
+        if(p.x>=32){
+          p.y++;
+          p.x=0;
+          if(p.y>=24){
+            p.y=0;
+            first_done = 1;
+          }
+        }
+      }
+      enable();
+    }
+  }
 }
 /* cambia el offset de impresion de pantalla por alguno de los cuadros */
 void set_viewport(int n){
@@ -193,14 +311,14 @@ void set_viewport(int n){
   current_view = n;
   setviewport(p->x, p->y, p->max_x, p->max_y, 1);
   setfillstyle(SOLID_FILL, BLACK);
-  clearviewport();
+   /*clearviewport();  */
 }
 PCB *aux;
 int first_run = 0;
 int tick_count =0;
 int turn = 0;
 PCB *get_next(){
-  int n = 3;
+  int n = 5;
   turn +=1;
   turn = turn%n;
   if(turn==0){
@@ -208,6 +326,12 @@ PCB *get_next(){
   }
   if(turn==1){
     return &pcbs[2];
+  }
+  if(turn==2){
+    return &pcbs[0];
+  }
+  if(turn==3){
+    return &pcbs[3];
   }
   return &pcbs[9];
 }
