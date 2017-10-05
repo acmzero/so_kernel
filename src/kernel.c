@@ -70,6 +70,9 @@ PCB *pcbs;
 PCB *running;
 PCB *waiting;
 
+int has_key;
+char key;
+
 /* utileria para inicializar puntos y rectangulos en pantalla */
 void set_off_point(int n, int x, int y, int max_x, int max_y){
   point *p = &off_points[n];
@@ -268,8 +271,9 @@ void proceso_4(){
   p.x=0;
   p.y=0;
   while(1){
-    if(kbhit() && (c =getch())!= 0x1B){
+    if(has_key){
       disable();
+      c = key;
       set_viewport(3);
       if(c==0x8){
         p.x--;
@@ -301,6 +305,7 @@ void proceso_4(){
           }
         }
       }
+      has_key = 0;
       enable();
     }
   }
@@ -377,11 +382,17 @@ void init_job(jobptr j, int n){
 
 /* se perdio SS y SP de main, emular main en un nuevo proceso */
 void proceso_exit(){
+  char c;
   while(1){
     if(kbhit()){
-      if(getch() == 0x1B){
+      if((c=getch()) == 0x1B){
         setvect(TIMER_INT, timer_handler_old);
         exit(1);
+      }else{
+        disable();
+        has_key = 1;
+        key = c;
+        enable();
       }
     }
   }
