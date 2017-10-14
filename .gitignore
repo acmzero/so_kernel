@@ -50,3 +50,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+dosbox/
+dosbox2/
+dosbox3/
+fw/
