@@ -1,0 +1,6 @@
+#include <manejadores/init.h>
+
+int main(void){
+  init_kernel();
+  while(1){};
+}
