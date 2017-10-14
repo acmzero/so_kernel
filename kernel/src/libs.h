@@ -17,6 +17,7 @@ typedef struct {
 
 extern void set_viewport(int n);
 extern void set_off_point(int n, int x, int y, int max_x, int max_y);
+extern point off_points[];
 
 
 #endif /* LIBS_H_ */

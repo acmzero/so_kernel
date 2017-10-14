@@ -7,9 +7,7 @@
 
 #include<GRAPHICS.H>
 #include<DOS.H>
-#ifndef DATOS_H_
 #include"datos.h"
-#endif
 #include"libs.h"
 
 /* editor de texto */
@@ -25,6 +23,7 @@ void proceso_5() {
 			disable();
 			c = key_c;
 			set_viewport(3);
+			outtextxy(10,10,"aoesuth");
 			if (c == 0x8) {
 				x--;
 				if (x < 0) {

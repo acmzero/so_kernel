@@ -16,3 +16,6 @@ ln -s ../../../.././kernel/src/libs.c     dosbox/dos/TC/SRC/LIBS.C
 ln -s ../../../.././kernel/src/proc3.c    dosbox/dos/TC/SRC/PROC3.C
 ln -s ../../../.././kernel/src/proc2.c    dosbox/dos/TC/SRC/PROC2.C
 ln -s ../../../.././kernel/src/pripro.c   dosbox/dos/TC/SRC/PRIPRO.C
+
+ln -s ../../../.././kernel/KERNEL.PRJ   dosbox/dos/TC/SRC/KERNEL.PRJ
+ln -s ../../../.././kernel/KERNEL.DSK   dosbox/dos/TC/SRC/KERNEL.DSK

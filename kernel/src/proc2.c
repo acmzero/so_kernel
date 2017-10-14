@@ -16,52 +16,52 @@ typedef struct {
   char c;
 } ball;
 
-void move_ball(ball b, point limit) {
+void move_ball(ball *b, point limit) {
 	int mx, my;
 	int ax, ay;
 	char str[32];
 	int speed = 7;
-	point p = b.p;
-	if (b.direction == 0) {
+	point p = b->p;
+	if (b->direction == 0) {
 		mx = speed;
 		my = speed;
 	}
-	if (b.direction == 1) {
+	if (b->direction == 1) {
 		mx = -1 * speed;
 		my = speed;
 	}
-	if (b.direction == 2) {
+	if (b->direction == 2) {
 		mx = -1 * speed;
 		my = -1 * speed;
 	}
-	if (b.direction == 3) {
+	if (b->direction == 3) {
 		mx = 1 * speed;
 		my = -1 * speed;
 	}
-	ax = b.p.x + mx;
-	ay = b.p.y + my;
+	ax = b->p.x + mx;
+	ay = b->p.y + my;
 
-	sprintf(str, "%d %d %d %d %d %d", ax, ay, b.p.x, b.p.y, limit.d_x,
+	sprintf(str, "%d %d %d %d %d %d", ax, ay, b->p.x, b->p.y, limit.d_x,
 			limit.d_y);
 	if (ax >= limit.x || ax < 0 || ay >= limit.y || ay < 0) {
 		/* movement not possible because is off screen */
 		/* new movement depends on clockwise */
-		b.direction = (b.direction + b.clockwise) % 4;
-		if (b.direction < 0) {
-			b.direction = 3;
+		b->direction = (b->direction + b->clockwise) % 4;
+		if (b->direction < 0) {
+			b->direction = 3;
 		}
 		move_ball(b, limit);
 	} else {
 		/* movement possible, erase previous char and put new x,y,char */
-		sprintf(str, "%c", b.c);
+		sprintf(str, "%c", b->c);
 		setfillstyle(SOLID_FILL, BLACK);
 		setcolor(BLACK);
 		/*bar(p.x, p.y, p.x+10, p.y+10); */
-		outtextxy(b.p.x, b.p.y, str);
+		outtextxy(b->p.x, b->p.y, str);
 		setcolor(WHITE);
-		b.p.x = ax;
-		b.p.y = ay;
-		outtextxy(b.p.x, b.p.y, str);
+		b->p.x = ax;
+		b->p.y = ay;
+		outtextxy(b->p.x, b->p.y, str);
 	}
 }
 
@@ -84,8 +84,8 @@ void proceso_2() {
 	while (1) {
 		disable();
 		set_viewport(0);
-		move_ball(b1, limit);
-		move_ball(b2, limit);
+		move_ball(&b1, limit);
+		move_ball(&b2, limit);
 		enable();
 		delay(1);
 	}

@@ -9,38 +9,36 @@
 #include"mancolas.h"
 #include"datos.h"
 
-
 bool first_run = false;
-PCB *torun;
+int torun;
 PCB main_pp;
-PCB running_pcb;
+int running_pcb;
+void interrupt(*timer_handler_old)
+(void);
 /* nuevo interrupt handler del timer */
 void interrupt timer_handler_new() {
 	disable();
-	printf("context_\n");
-	/* ignora primer _SS y _SP correspondientes a main */
-	if(first_run) {
-		/* guarda SS y SP del proceso en ejecucion */
-		torun->ss = _SS;
-		torun->sp = _SP;
-		torun->state = READY;
+	if (first_run) {
+		pcbs[torun].ss = _SS;
+		pcbs[torun].sp = _SP;
+		pcbs[torun].state = READY;
 	} else {
-		/* save init.main state */
 		main_pp.ss = _SS;
 		main_pp.sp = _SP;
 		main_pp.state = READY;
 		main_pp.name = "main";
 		/*inserta(&main_pp, listos); */
 	}
+	torun = obtener_primero();
+	if (first_run) {
+		inserta(running_pcb);
+	}
 
-	torun = obtener_primero(listos)->value;
-	printf("next to run %s\n", torun->name );
-
-	/* asigna SS y SP del nuevo proceso */
-	_SS = torun->ss;
-	_SP = torun->sp;
-	torun->state = RUNNING;
-	if(!first_run) {
+	_SS = pcbs[torun].ss;
+	_SP = pcbs[torun].sp;
+	pcbs[torun].state = RUNNING;
+	running_pcb = torun;
+	if (!first_run) {
 		first_run = true;
 	}
 	timer_handler_old();

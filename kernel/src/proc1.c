@@ -11,6 +11,9 @@
 #include"mancpu.h"
 #include"procesos.h"
 
+int MAX_X=0, MAX_Y=0;
+int MID_X=0, MID_Y=0;
+bool graphics_itinialized = false;
 void proceso_1() {
 	int gd = DETECT, gm;
 	int x, y, m_x, m_y;
@@ -18,7 +21,8 @@ void proceso_1() {
 	activa(&proceso_3, "p3");
 	activa(&proceso_4, "p4");
 	activa(&proceso_5, "p5");
-	initgraph(&gd, &gm, "c:\\tc\\bgi");
+	initgraph(&gd, &gm, "c:\\turboc3\\bgi");
+	graphics_itinialized = true;
 	x = getmaxx();
 	y = getmaxy();
 	MAX_X = x;
@@ -34,6 +38,5 @@ void proceso_1() {
 	set_off_point(2, 0, m_y + 1, m_x, y);
 	set_off_point(3, m_x, m_y + 1, x, y);
 	elimina();
-	timer_handler_new();
 }
 

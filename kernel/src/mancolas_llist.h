@@ -25,8 +25,7 @@ extern void inserta(int pcb);
 extern void sacar(int n);
 extern int obtener_primero();
 
-extern int listos[];
-extern int listos_idx;
+extern cola listos;
 extern bool cola_initialized;
 
 #endif /* MANCOLAS_H_ */

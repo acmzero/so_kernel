@@ -8,8 +8,8 @@
 #ifndef DATOS_H_
 #define DATOS_H_
 
-#define STACK_SIZE 10
-#define PCBS_SIZE 2048
+#define STACK_SIZE 2048
+#define PCBS_SIZE 10
 #define ESC_KEY 0x1B
 
 typedef enum {
@@ -27,8 +27,9 @@ typedef struct {
 	char dummy2;
 } PCB;
 
-extern PCB pcbs[PCBS_SIZE];
-extern PCB running_pcb;
+extern PCB pcbs[];
+extern int running_pcb;
+extern int pcb_count;
 
 typedef struct {
 	unsigned bp, di, si, ds, es, dx, cx, bx, ax, ip, cs, flags;
@@ -38,12 +39,14 @@ typedef enum {
 	false, true
 } bool;
 
-static bool esc_pressed = false;
-static bool has_key = false;
-static char key_c;
+extern bool esc_pressed;
+extern bool has_key;
+extern char key_c;
 
-static int MAX_X=0, MAX_Y=0;
-static int MID_X=0, MID_Y=0;
+extern int MAX_X, MAX_Y;
+extern int MID_X, MID_Y;
+
+extern bool graphics_itinialized;
 
 #endif /* DATOS_H_ */
 
