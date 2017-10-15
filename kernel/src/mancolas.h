@@ -9,24 +9,18 @@
 #ifndef MANCOLAS_H_
 #define MANCOLAS_H_
 #define NULL_ENTRY -1
-
-struct cola_ent {
-	int value;
-	struct cola_ent *next;
-};
-
-typedef struct cola_ent cola_entry;
+#define QUEUE_CAPACITY 20
 
 typedef struct {
-	cola_entry *head;
-} cola;
+	int front, rear, size;
+	unsigned capacity;
+	int array[QUEUE_CAPACITY];
+} queue;
 
 extern void inserta(int pcb);
 extern void sacar(int n);
 extern int obtener_primero();
 
-extern int listos[];
-extern int listos_idx;
-extern bool cola_initialized;
+extern queue listos;
 
 #endif /* MANCOLAS_H_ */

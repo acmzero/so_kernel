@@ -11,13 +11,13 @@
 #include"mancpu.h"
 #include"procesos.h"
 
-int MAX_X=0, MAX_Y=0;
-int MID_X=0, MID_Y=0;
+int MAX_X = 0, MAX_Y = 0;
+int MID_X = 0, MID_Y = 0;
 bool graphics_itinialized = false;
 void proceso_1() {
 	int gd = DETECT, gm;
 	int x, y, m_x, m_y;
-	activa(&proceso_2, "p2");
+//	activa(&proceso_2, "p2");
 	activa(&proceso_3, "p3");
 	activa(&proceso_4, "p4");
 	activa(&proceso_5, "p5");

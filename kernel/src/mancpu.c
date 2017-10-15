@@ -21,13 +21,15 @@ void interrupt timer_handler_new() {
 	if (first_run) {
 		pcbs[torun].ss = _SS;
 		pcbs[torun].sp = _SP;
-		pcbs[torun].state = READY;
 	} else {
 		main_pp.ss = _SS;
 		main_pp.sp = _SP;
 		main_pp.state = READY;
 		main_pp.name = "main";
-		/*inserta(&main_pp, listos); */
+		main_pp.id = pcb_count;
+		pcbs[pcb_count] = main_pp;
+		pcb_count++;
+		inserta(main_pp.id);
 	}
 	torun = obtener_primero();
 	if (first_run) {

@@ -9,37 +9,65 @@
 #include"libs.h"
 #include<GRAPHICS.H>
 
-#define MAX 10
+queue listos;
 
-int intArray[MAX];
-int front = 0;
-int rear = -1;
-int itemCount = 0;
-
-bool isFull() {
-	return itemCount == MAX;
+bool is_full() {
+	return listos.size == listos.capacity;
 }
+
+bool is_empty() {
+	return listos.size == 0;
+}
+
 void inserta(int pcb) {
-	if (!isFull()) {
-		if (rear == MAX - 1) {
-			rear = -1;
-		}
-		intArray[++rear] = pcb;
-		itemCount++;
+	if (is_full()) {
+		set_viewport(3);
+		outtextxy(10, 10, "listos full no inserting done");
+		return;
 	}
-}
-void sacar(int n) {
-	pcbs[n].state = TERMINATED;
+	if (pcbs[pcb].state == TERMINATED) {
+		return;
+	}
+	pcbs[pcb].state = READY;
+	listos.rear = (listos.rear + 1) % listos.capacity;
+	listos.array[listos.rear] = pcb;
+	listos.size = listos.size + 1;
 }
 
+char str[20];
+char str1[20];
 int obtener_primero() {
-	int data = intArray[front++];
-	if (front == MAX) {
-		front = 0;
+	int x;
+	if (is_empty()) {
+		set_viewport(3);
+		outtextxy(10, 20, "listos empty can't get item");
+		return NULL_ENTRY;
 	}
-	itemCount--;
-	if (pcbs[data].state == TERMINATED) {
+	x = listos.array[listos.front];
+	listos.front = (listos.front + 1) % listos.capacity;
+	listos.size = listos.size - 1;
+	if (x == NULL_ENTRY || pcbs[x].state == TERMINATED) {
 		return obtener_primero();
 	}
-	return data;
+	if (graphics_itinialized) {
+		set_viewport(3);
+		setcolor(BLACK);
+		outtextxy(10, 30, str);
+		outtextxy(10, 50, str1);
+		setcolor(WHITE);
+		sprintf(str, "first %d", x);
+		outtextxy(10, 30, str);
+		sprintf(str1, "f %d r %d", listos.front, listos.rear);
+		outtextxy(10, 50, str1);
+	}
+	return x;
+}
+void sacar(int n) {
+	int i;
+	for (i = 0; i < listos.capacity; i++) {
+		if (listos.array[i] == n) {
+			listos.array[i] = NULL_ENTRY;
+			return;
+		}
+	}
 }

@@ -8,7 +8,7 @@
 #ifndef DATOS_H_
 #define DATOS_H_
 
-#define STACK_SIZE 2048
+#define STACK_SIZE 1024
 #define PCBS_SIZE 10
 #define ESC_KEY 0x1B
 
@@ -47,6 +47,7 @@ extern int MAX_X, MAX_Y;
 extern int MID_X, MID_Y;
 
 extern bool graphics_itinialized;
+extern int pcb_count;
 
 #endif /* DATOS_H_ */
 

@@ -10,17 +10,20 @@
 #include<DOS.H>
 
 typedef struct {
-  point p;
-  int clockwise;
-  int direction;
-  char c;
+	point p;
+	int clockwise;
+	int direction;
+	char c;
+	int dir_change_count;
 } ball;
 
-void move_ball(ball *b, point limit) {
+ball balls[2];
+void move_ball(int bn, point limit) {
 	int mx, my;
 	int ax, ay;
 	char str[32];
-	int speed = 7;
+	ball *b = &balls[bn];
+	int speed = 1;
 	point p = b->p;
 	if (b->direction == 0) {
 		mx = speed;
@@ -43,51 +46,47 @@ void move_ball(ball *b, point limit) {
 
 	sprintf(str, "%d %d %d %d %d %d", ax, ay, b->p.x, b->p.y, limit.d_x,
 			limit.d_y);
-	if (ax >= limit.x || ax < 0 || ay >= limit.y || ay < 0) {
+	if (ax >= limit.x || ax < 3 || ay >= limit.y || ay < 3) {
+		if(b->dir_change_count%10==0){
+			b->clockwise = b->clockwise*-1;
+			b->dir_change_count=1;
+		}
 		/* movement not possible because is off screen */
 		/* new movement depends on clockwise */
 		b->direction = (b->direction + b->clockwise) % 4;
 		if (b->direction < 0) {
 			b->direction = 3;
 		}
-		move_ball(b, limit);
+		b->dir_change_count++;
+		move_ball(bn, limit);
 	} else {
 		/* movement possible, erase previous char and put new x,y,char */
 		sprintf(str, "%c", b->c);
-		setfillstyle(SOLID_FILL, BLACK);
+		disable();
+		set_viewport(0);
 		setcolor(BLACK);
-		/*bar(p.x, p.y, p.x+10, p.y+10); */
 		outtextxy(b->p.x, b->p.y, str);
 		setcolor(WHITE);
 		b->p.x = ax;
 		b->p.y = ay;
 		outtextxy(b->p.x, b->p.y, str);
+		enable();
 	}
 }
 
 void proceso_2() {
 	point limit;
-	ball b1;
-	ball b2;
-	b1.p.x = 30;
-	b1.p.y = 55;
-	b1.clockwise = 1;
-	b1.c = '0';
-	b1.direction = 1;
-	b2.p.x = 50;
-	b2.p.y = 73;
-	b2.clockwise = -1;
-	b2.c = '0';
-	b2.direction = 1;
-	limit.x = MID_X;
-	limit.y = MID_Y;
+	balls[0].p.x = 30;
+	balls[0].p.y = 55;
+	balls[0].clockwise = -1;
+	balls[0].c = '0';
+	balls[0].direction = 1;
+	balls[0].dir_change_count = 0;
+	limit.x = MID_X-7;
+	limit.y = MID_Y-7;
 	while (1) {
-		disable();
-		set_viewport(0);
-		move_ball(&b1, limit);
-		move_ball(&b2, limit);
-		enable();
-		delay(1);
+		move_ball(0, limit);
+		delay(3);
 	}
 }
 

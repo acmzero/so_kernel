@@ -11,25 +11,23 @@
 /* mostrar hora */
 void proceso_3() {
 	int c_sec = -1;
+	char f_time[30];
 	while (1) {
 		struct time t;
-		char *f_time;
 		int x, y, sec;
 		gettime(&t);
 		sec = (int) t.ti_sec;
-//    if(c_sec!=sec){
 		c_sec = sec;
-		f_time = (char*) malloc(20 * sizeof(char));
-		sprintf(f_time, "Time: %02d:%02d:%02d.%02d", t.ti_hour, t.ti_min,
-				t.ti_sec, t.ti_hund);
-		x = 10;
-		y = 10;
 		disable();
 		set_viewport(1);
-		bar(x, y, 200, 200);
+		x = 10;
+		y = 10;
+		setcolor(BLACK);
+		outtextxy(x, y, f_time);
+		sprintf(f_time, "Time: %02d:%02d:%02d.%02d", t.ti_hour, t.ti_min,
+				t.ti_sec, t.ti_hund);
+		setcolor(WHITE);
 		outtextxy(x, y, f_time);
 		enable();
-		delay(1);
-//    }
 	}
 }

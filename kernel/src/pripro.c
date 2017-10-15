@@ -12,11 +12,9 @@
 
 
 PCB pcbs[PCBS_SIZE];
-int pcb_count=0;
+int pcb_count=1;
 void activa(void (*jobptr), char *name) {
 	regs *ct = (regs*) pcbs[pcb_count].stack + STACK_SIZE - sizeof(regs);
-//	printf("pcb_count %d\n",pcb_count);
-
 	pcbs[pcb_count].id = pcb_count;
 	pcbs[pcb_count].state = READY;
 	pcbs[pcb_count].name = name;
