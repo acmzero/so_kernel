@@ -8,6 +8,7 @@
 #include"datos.h"
 #include<GRAPHICS.H>
 #include<DOS.H>
+#include"pripro.h"
 
 typedef struct {
 	point p;
@@ -111,8 +112,9 @@ void proceso_2() {
 	limit.x = MID_X - 7;
 	limit.y = MID_Y - 7;
 	while (1) {
+		lee_teclado();
 		move_ball(0, limit);
-		delay(3);
+		lee_teclado();
 	}
 }
 

@@ -7,14 +7,16 @@
 #include<GRAPHICS.H>
 #include<DOS.H>
 #include"libs.h"
+#include"pripro.h"
 
 /* mostrar hora */
 void proceso_3() {
 	int c_sec = -1;
 	char f_time[30];
+	struct time t;
+	int x, y, sec;
 	while (1) {
-		struct time t;
-		int x, y, sec;
+		lee_teclado();
 		gettime(&t);
 		sec = (int) t.ti_sec;
 		c_sec = sec;
@@ -29,6 +31,6 @@ void proceso_3() {
 		setcolor(WHITE);
 		outtextxy(x, y, f_time);
 		enable();
-		delay(1);
+		lee_teclado();
 	}
 }

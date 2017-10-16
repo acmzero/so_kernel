@@ -10,6 +10,11 @@
 #define MANCOLAS_H_
 #define NULL_ENTRY -1
 #define QUEUE_CAPACITY 20
+#define COLAS_SIZE 5
+
+typedef enum {
+	LISTOS, TECLADO
+} colas_idx;
 
 typedef struct {
 	int front, rear, size;
@@ -17,10 +22,12 @@ typedef struct {
 	int array[QUEUE_CAPACITY];
 } queue;
 
-extern void inserta(int pcb);
-extern void sacar(int n);
-extern int obtener_primero();
+extern void inserta(int pcb, int q);
+extern void sacar(int n, int q);
+extern int obtener_primero(int q);
 
-extern queue listos;
+extern bool is_empty(int q);
+
+extern queue colas[];
 
 #endif /* MANCOLAS_H_ */

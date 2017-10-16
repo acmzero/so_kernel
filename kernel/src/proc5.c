@@ -9,6 +9,8 @@
 #include<DOS.H>
 #include"datos.h"
 #include"libs.h"
+#include"pripro.h"
+#include"mancolas.h"
 
 /* editor de texto */
 void proceso_5() {
@@ -19,11 +21,12 @@ void proceso_5() {
 	x = 0;
 	y = 0;
 	while (1) {
-		if (has_key) {
+		lee_teclado();
+		if (!is_empty(TECLADO)) {
 			disable();
 			/*set_viewport(3);
 			 outtextxy(10, 10, "aoesuth");*/
-			c = key_c;
+			c = obtener_primero(TECLADO);
 			set_viewport(3);
 			if (c == 0x8) {
 				x--;
@@ -58,6 +61,6 @@ void proceso_5() {
 			has_key = false;
 			enable();
 		}
-		delay(1);
+		lee_teclado();
 	}
 }

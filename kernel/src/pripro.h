@@ -12,5 +12,7 @@ typedef void(*jobptr)();
 
 extern void activa(void (*jobptr), char *);
 extern void elimina();
+extern void lee_teclado();
+
 
 #endif /* PRIPRO_H_ */

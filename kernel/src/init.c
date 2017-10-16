@@ -15,10 +15,10 @@
 #define TIMER_INT 0x8
 
 int main(void) {
-	listos.capacity = QUEUE_CAPACITY;
-	listos.size = 0;
-	listos.front = 0;
-	listos.rear = QUEUE_CAPACITY - 1;
+	colas[LISTOS].capacity = QUEUE_CAPACITY;
+	colas[LISTOS].size = 0;
+	colas[LISTOS].front = 0;
+	colas[LISTOS].rear = QUEUE_CAPACITY - 1;
 	activa(&proceso_1, "p1");
 	activa(&proceso_6, "p6");
 	timer_handler_old = getvect(TIMER_INT);
@@ -29,17 +29,7 @@ int main(void) {
 		if (esc_pressed) {
 			break;
 		}
-		if (kbhit()) {
-		disable();
-			key_c = getch();
-			if (key_c == ESC_KEY) {
-				esc_pressed = true;
-				break;
-			} else {
-				has_key = true;
-			}
-		enable();
-		}
+		lee_teclado();
 	}
 	setvect(TIMER_INT, timer_handler_old);
 

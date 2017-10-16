@@ -10,44 +10,48 @@
 #include<GRAPHICS.H>
 
 queue listos;
+queue colas[COLAS_SIZE];
 
-bool is_full() {
-	return listos.size == listos.capacity;
+bool is_full(int q) {
+	return colas[q].size == colas[q].capacity;
 }
 
-bool is_empty() {
-	return listos.size == 0;
+bool is_empty(int q) {
+	return colas[q].size == 0;
 }
 
-void inserta(int pcb) {
-	if (is_full()) {
-		set_viewport(3);
-		outtextxy(10, 10, "listos full no inserting done");
+void inserta(int pcb, int q) {
+	if (is_full(q)) {
+		/*set_viewport(3);
+		 outtextxy(10, 10, "listos full no inserting done");*/
 		return;
 	}
-	if (pcbs[pcb].state == TERMINATED) {
-		return;
+	if (q == LISTOS) {
+		if (pcbs[pcb].state == TERMINATED) {
+			return;
+		}
+		pcbs[pcb].state = READY;
 	}
-	pcbs[pcb].state = READY;
-	listos.rear = (listos.rear + 1) % listos.capacity;
-	listos.array[listos.rear] = pcb;
-	listos.size = listos.size + 1;
+
+	colas[q].rear = (colas[q].rear + 1) % colas[q].capacity;
+	colas[q].array[colas[q].rear] = pcb;
+	colas[q].size = colas[q].size + 1;
 }
 
 char str[20];
 char str1[20];
-int obtener_primero() {
+int obtener_primero(int q) {
 	int x;
-	if (is_empty()) {
-		set_viewport(3);
-		outtextxy(10, 20, "listos empty can't get item");
+	if (is_empty(q)) {
+		/*set_viewport(3);
+		 outtextxy(10, 20, "listos empty can't get item");*/
 		return NULL_ENTRY;
 	}
-	x = listos.array[listos.front];
-	listos.front = (listos.front + 1) % listos.capacity;
-	listos.size = listos.size - 1;
-	if (x == NULL_ENTRY || pcbs[x].state == TERMINATED) {
-		return obtener_primero();
+	x = colas[q].array[colas[q].front];
+	colas[q].front = (colas[q].front + 1) % colas[q].capacity;
+	colas[q].size = colas[q].size - 1;
+	if (x == NULL_ENTRY || (q == LISTOS && pcbs[x].state == TERMINATED)) {
+		return obtener_primero(q);
 	}
 	/*if (graphics_itinialized) {
 	 set_viewport(3);
@@ -62,11 +66,11 @@ int obtener_primero() {
 	 }*/
 	return x;
 }
-void sacar(int n) {
+void sacar(int n, int q) {
 	int i;
-	for (i = 0; i < listos.capacity; i++) {
-		if (listos.array[i] == n) {
-			listos.array[i] = NULL_ENTRY;
+	for (i = 0; i < colas[q].capacity; i++) {
+		if (colas[q].array[i] == n) {
+			colas[q].array[i] = NULL_ENTRY;
 			return;
 		}
 	}

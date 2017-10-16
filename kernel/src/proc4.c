@@ -7,6 +7,7 @@
 #include<GRAPHICS.H>
 #include<DOS.H>
 #include"libs.h"
+#include"pripro.h"
 
 /* mostrar mensaje random */
 char *str_m;
@@ -14,9 +15,10 @@ void proceso_4() {
 	char *messages[] = { "This is a fixed length text",
 			"this is the same length   .", "hoy me fue bien en el examen :)" };
 	int c_sec = -1;
+	struct time t;
+	int count, n;
 	while (1) {
-		struct time t;
-		int count, n;
+		lee_teclado();
 		gettime(&t);
 		count = (int) t.ti_sec;
 		n = 3;
@@ -31,7 +33,7 @@ void proceso_4() {
 			outtextxy(10, 10, str_m);
 			enable();
 		}
-		delay(1);
+		lee_teclado();
 	}
 }
 
