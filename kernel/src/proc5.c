@@ -12,6 +12,9 @@
 #include"pripro.h"
 #include"mancolas.h"
 
+#define ENTER_KEY 0xD
+#define BACKSPACE_KEY 0x8
+
 /* editor de texto */
 void proceso_5() {
 	char mat[40][40], c, str[2];
@@ -28,7 +31,7 @@ void proceso_5() {
 			 outtextxy(10, 10, "aoesuth");*/
 			c = obtener_primero(TECLADO);
 			set_viewport(3);
-			if (c == 0x8) {
+			if (c == BACKSPACE_KEY) {
 				x--;
 				if (x < 0) {
 					x = 32;
@@ -37,6 +40,9 @@ void proceso_5() {
 				if (y < 0) {
 					y = 23;
 				}
+			} else if (c == ENTER_KEY) {
+				y++;
+				x = 0;
 			}
 			if (first_done || c == 0x8) {
 				setcolor(BLACK);
@@ -44,7 +50,7 @@ void proceso_5() {
 				outtextxy(x * text_size, y * text_size, str);
 				setcolor(WHITE);
 			}
-			if (c != 0x8) {
+			if (c != BACKSPACE_KEY && c != ENTER_KEY) {
 				sprintf(str, "%c", c);
 				outtextxy(x * text_size, y * text_size, str);
 				mat[x][y] = c;
