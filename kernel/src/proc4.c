@@ -27,10 +27,11 @@ void proceso_4() {
 			setcolor(BLACK);
 			outtextxy(10, 10, str_m);
 			setcolor(WHITE);
-			str_m = messages[count%n];
+			str_m = messages[count % n];
 			outtextxy(10, 10, str_m);
 			enable();
 		}
+		delay(1);
 	}
 }
 

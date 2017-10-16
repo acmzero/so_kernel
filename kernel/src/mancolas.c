@@ -49,17 +49,17 @@ int obtener_primero() {
 	if (x == NULL_ENTRY || pcbs[x].state == TERMINATED) {
 		return obtener_primero();
 	}
-	if (graphics_itinialized) {
-		set_viewport(3);
-		setcolor(BLACK);
-		outtextxy(10, 30, str);
-		outtextxy(10, 50, str1);
-		setcolor(WHITE);
-		sprintf(str, "first %d", x);
-		outtextxy(10, 30, str);
-		sprintf(str1, "f %d r %d", listos.front, listos.rear);
-		outtextxy(10, 50, str1);
-	}
+	/*if (graphics_itinialized) {
+	 set_viewport(3);
+	 setcolor(BLACK);
+	 outtextxy(10, 30, str);
+	 outtextxy(10, 50, str1);
+	 setcolor(WHITE);
+	 sprintf(str, "first %d", x);
+	 outtextxy(10, 30, str);
+	 sprintf(str1, "f %d r %d", listos.front, listos.rear);
+	 outtextxy(10, 50, str1);
+	 }*/
 	return x;
 }
 void sacar(int n) {

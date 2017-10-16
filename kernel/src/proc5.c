@@ -21,8 +21,8 @@ void proceso_5() {
 	while (1) {
 		if (has_key) {
 			disable();
-			set_viewport(3);
-			outtextxy(10, 10, "aoesuth");
+			/*set_viewport(3);
+			 outtextxy(10, 10, "aoesuth");*/
 			c = key_c;
 			set_viewport(3);
 			if (c == 0x8) {
@@ -58,5 +58,6 @@ void proceso_5() {
 			has_key = false;
 			enable();
 		}
+		delay(1);
 	}
 }

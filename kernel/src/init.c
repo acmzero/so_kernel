@@ -30,16 +30,18 @@ int main(void) {
 			break;
 		}
 		if (kbhit()) {
+		disable();
 			key_c = getch();
 			if (key_c == ESC_KEY) {
 				esc_pressed = true;
+				break;
 			} else {
 				has_key = true;
 			}
+		enable();
 		}
 	}
 	setvect(TIMER_INT, timer_handler_old);
-	exit(0);
 
 	return 0;
 }
