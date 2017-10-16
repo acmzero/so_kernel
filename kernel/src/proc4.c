@@ -33,7 +33,6 @@ void proceso_4() {
 			outtextxy(10, 10, str_m);
 			enable();
 		}
-		lee_teclado();
 	}
 }
 

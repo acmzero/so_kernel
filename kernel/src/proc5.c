@@ -61,6 +61,5 @@ void proceso_5() {
 			has_key = false;
 			enable();
 		}
-		lee_teclado();
 	}
 }

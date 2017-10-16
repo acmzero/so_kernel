@@ -22,8 +22,6 @@ bool is_empty(int q) {
 
 void inserta(int pcb, int q) {
 	if (is_full(q)) {
-		/*set_viewport(3);
-		 outtextxy(10, 10, "listos full no inserting done");*/
 		return;
 	}
 	if (q == LISTOS) {
@@ -43,8 +41,6 @@ char str1[20];
 int obtener_primero(int q) {
 	int x;
 	if (is_empty(q)) {
-		/*set_viewport(3);
-		 outtextxy(10, 20, "listos empty can't get item");*/
 		return NULL_ENTRY;
 	}
 	x = colas[q].array[colas[q].front];
@@ -53,17 +49,6 @@ int obtener_primero(int q) {
 	if (x == NULL_ENTRY || (q == LISTOS && pcbs[x].state == TERMINATED)) {
 		return obtener_primero(q);
 	}
-	/*if (graphics_itinialized) {
-	 set_viewport(3);
-	 setcolor(BLACK);
-	 outtextxy(10, 30, str);
-	 outtextxy(10, 50, str1);
-	 setcolor(WHITE);
-	 sprintf(str, "first %d", x);
-	 outtextxy(10, 30, str);
-	 sprintf(str1, "f %d r %d", listos.front, listos.rear);
-	 outtextxy(10, 50, str1);
-	 }*/
 	return x;
 }
 void sacar(int n, int q) {

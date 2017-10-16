@@ -14,7 +14,6 @@ void print_listos() {
 	cola_entry *e;
 	e = listos.head;
 	while (e != NULL_ENTRY) {
-//		printf(" %d\n",e->value);
 		e = e->next;
 	}
 }

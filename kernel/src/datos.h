@@ -8,7 +8,7 @@
 #ifndef DATOS_H_
 #define DATOS_H_
 
-#define STACK_SIZE 1024
+#define STACK_SIZE 2048
 #define PCBS_SIZE 10
 #define ESC_KEY 0x1B
 

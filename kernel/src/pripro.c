@@ -34,16 +34,7 @@ void elimina() {
 	timer_handler_new();
 }
 
-queue teclado;
-bool teclado_initialized = false;
 void lee_teclado() {
-	if (!teclado_initialized) {
-		colas[TECLADO].capacity = QUEUE_CAPACITY;
-		colas[TECLADO].size = 0;
-		colas[TECLADO].front = 0;
-		colas[TECLADO].rear = QUEUE_CAPACITY - 1;
-		teclado_initialized = true;
-	}
 	if (kbhit()) {
 		key_c = getch();
 		if (key_c == ESC_KEY) {

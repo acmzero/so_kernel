@@ -15,10 +15,13 @@
 #define TIMER_INT 0x8
 
 int main(void) {
-	colas[LISTOS].capacity = QUEUE_CAPACITY;
-	colas[LISTOS].size = 0;
-	colas[LISTOS].front = 0;
-	colas[LISTOS].rear = QUEUE_CAPACITY - 1;
+	int i;
+	for (i = 0; i < COLAS_SIZE; i++) {
+		colas[i].capacity = QUEUE_CAPACITY;
+		colas[i].size = 0;
+		colas[i].front = 0;
+		colas[i].rear = QUEUE_CAPACITY - 1;
+	}
 	activa(&proceso_1, "p1");
 	activa(&proceso_6, "p6");
 	timer_handler_old = getvect(TIMER_INT);

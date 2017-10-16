@@ -31,6 +31,5 @@ void proceso_3() {
 		setcolor(WHITE);
 		outtextxy(x, y, f_time);
 		enable();
-		lee_teclado();
 	}
 }
