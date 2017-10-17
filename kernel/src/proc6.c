@@ -1,8 +1,7 @@
 /*
  * proc6.c
  *
- *  Created on: Oct 12, 2017
- *      Author: heli
+ *      Author: Heli Villarreal, Roberto Mieres
  */
 
 #include<DOS.H>

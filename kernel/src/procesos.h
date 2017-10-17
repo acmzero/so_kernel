@@ -1,8 +1,7 @@
 /*
  * procesos.h
  *
- *  Created on: Oct 12, 2017
- *      Author: heli
+ *      Author: Heli Villarreal, Roberto Mieres
  */
 
 #ifndef PROCESOS_H_
