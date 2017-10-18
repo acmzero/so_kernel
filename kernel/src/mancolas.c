@@ -9,53 +9,33 @@
 #include<GRAPHICS.H>
 
 queue listos;
-queue colas[COLAS_SIZE];
 
-bool is_full(int q) {
-	return colas[q].size == colas[q].capacity;
-}
-
-bool is_empty(int q) {
-	return colas[q].size == 0;
-}
-
-void inserta(int pcb, int q) {
-	if (is_full(q)) {
+void inserta(int n, queue *q) {
+	if (pcbs[n].state == TERMINATED) {
 		return;
 	}
-	if (q == LISTOS) {
-		if (pcbs[pcb].state == TERMINATED) {
-			return;
-		}
-		pcbs[pcb].state = READY;
-	}
-
-	colas[q].rear = (colas[q].rear + 1) % colas[q].capacity;
-	colas[q].array[colas[q].rear] = pcb;
-	colas[q].size = colas[q].size + 1;
+	pcbs[n].state = READY;
+	enqueue(n, q);
 }
 
-char str[20];
-char str1[20];
-int obtener_primero(int q) {
+int obtener_primero(queue *q) {
 	int x;
-	if (is_empty(q)) {
-		return NULL_ENTRY;
-	}
-	x = colas[q].array[colas[q].front];
-	colas[q].front = (colas[q].front + 1) % colas[q].capacity;
-	colas[q].size = colas[q].size - 1;
-	if (x == NULL_ENTRY || (q == LISTOS && pcbs[x].state == TERMINATED)) {
+	x = dequeue(q);
+	if (x == NULL_ENTRY || pcbs[x].state == TERMINATED) {
 		return obtener_primero(q);
 	}
 	return x;
 }
-void sacar(int n, int q) {
+void sacar(int n, queue *q) {
 	int i;
-	for (i = 0; i < colas[q].capacity; i++) {
-		if (colas[q].array[i] == n) {
-			colas[q].array[i] = NULL_ENTRY;
+	for (i = 0; i < q->capacity; i++) {
+		if (q->array[i] == n) {
+			q->array[i] = NULL_ENTRY;
 			return;
 		}
 	}
+}
+
+void inicializa_colas() {
+	init_queue(&listos);
 }

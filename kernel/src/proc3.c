@@ -3,10 +3,10 @@
  *
  *      Author: Heli Villarreal, Roberto Mieres
  */
+#include"procesos.h"
 #include<GRAPHICS.H>
 #include<DOS.H>
 #include"libs.h"
-#include"pripro.h"
 
 /* mostrar hora */
 void proceso_3() {

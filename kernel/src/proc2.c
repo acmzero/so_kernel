@@ -3,11 +3,11 @@
  *
  *      Author: Heli Villarreal, Roberto Mieres
  */
+#include"procesos.h"
 #include"libs.h"
 #include"datos.h"
 #include<GRAPHICS.H>
 #include<DOS.H>
-#include"pripro.h"
 
 typedef struct {
 	point p;
@@ -18,13 +18,15 @@ typedef struct {
 } ball;
 
 ball balls[2];
-void move_ball(int bn, point limit) {
+char str[3];
+void move_ball(int bn, point limit, bool first) {
 	int mx, my;
 	int ax, ay;
-	char str[32];
 	ball b = balls[bn];
 	int speed = 1;
-	point p = b.p;
+	if (!first) {
+		return;
+	}
 	if (b.direction == 0) {
 		mx = speed;
 		my = speed;
@@ -44,8 +46,6 @@ void move_ball(int bn, point limit) {
 	ax = b.p.x + mx;
 	ay = b.p.y + my;
 
-	sprintf(str, "%d %d %d %d %d %d", ax, ay, b.p.x, b.p.y, limit.d_x,
-			limit.d_y);
 	if (ax >= limit.x || ax < 3 || ay >= limit.y || ay < 3) {
 		if (ax >= limit.x && ay >= limit.y) {
 			b.direction = 2;
@@ -83,9 +83,8 @@ void move_ball(int bn, point limit) {
 
 		b.dir_change_count++;
 		balls[bn] = b;
-		move_ball(bn, limit);
+		move_ball(bn, limit, false);
 	} else {
-		/* movement possible, erase previous char and put new x,y,char */
 		sprintf(str, "%c", b.c);
 		disable();
 		set_viewport(0);
@@ -100,19 +99,22 @@ void move_ball(int bn, point limit) {
 	}
 }
 
+void inicializa_ball(int n) {
+	balls[n].p.x = 30;
+	balls[n].p.y = 55;
+	balls[n].clockwise = -1;
+	balls[n].c = '0';
+	balls[n].direction = 1;
+	balls[n].dir_change_count = 0;
+}
 void proceso_2() {
 	point limit;
-	balls[0].p.x = 30;
-	balls[0].p.y = 55;
-	balls[0].clockwise = -1;
-	balls[0].c = '0';
-	balls[0].direction = 1;
-	balls[0].dir_change_count = 0;
 	limit.x = MID_X - 7;
 	limit.y = MID_Y - 7;
+	inicializa_ball(0);
 	while (1) {
 		lee_teclado();
-		move_ball(0, limit);
+		move_ball(0, limit, true);
 		delay(2);
 	}
 }

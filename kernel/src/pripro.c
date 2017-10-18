@@ -3,10 +3,11 @@
  *
  *      Author: Heli Villarreal, Roberto Mieres
  */
+#include"pripro.h"
 #include<DOS.H>
 #include"datos.h"
 #include"mancolas.h"
-#include"pripro.h"
+#include"mancpu.h"
 
 PCB pcbs[PCBS_SIZE];
 int pcb_count = 1;
@@ -23,25 +24,14 @@ void activa(void (*jobptr), char *name) {
 	ct->cs = FP_SEG(jobptr);
 	ct->ip = FP_OFF(jobptr);
 	ct->flags = 0x200;
-	inserta(pcb_count, LISTOS);
+	inserta(pcb_count, &listos);
 	pcb_count++;
 }
 
 void elimina() {
-	sacar(running_pcb, LISTOS);
+	sacar(running_pcb, &listos);
 	pcbs[running_pcb].state = TERMINATED;
 	timer_handler_new();
 }
 
-void lee_teclado() {
-	if (kbhit()) {
-		key_c = getch();
-		if (key_c == ESC_KEY) {
-			esc_pressed = true;
-		} else {
-			has_key = true;
-			inserta(key_c, TECLADO);
-		}
-	}
-}
 

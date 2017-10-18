@@ -28,11 +28,11 @@ void interrupt timer_handler_new() {
 		main_pp.id = pcb_count;
 		pcbs[pcb_count] = main_pp;
 		pcb_count++;
-		inserta(main_pp.id, LISTOS);
+		inserta(main_pp.id, &listos);
 	}
-	torun = obtener_primero(LISTOS);
+	torun = obtener_primero(&listos);
 	if (first_run) {
-		inserta(running_pcb, LISTOS);
+		inserta(running_pcb, &listos);
 	}
 
 	_SS = pcbs[torun].ss;

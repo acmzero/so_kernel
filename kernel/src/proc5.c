@@ -4,11 +4,11 @@
  *      Author: Heli Villarreal, Roberto Mieres
  */
 
+#include"procesos.h"
 #include<GRAPHICS.H>
 #include<DOS.H>
 #include"datos.h"
 #include"libs.h"
-#include"pripro.h"
 #include"mancolas.h"
 
 #define ENTER_KEY 0xD
@@ -24,11 +24,11 @@ void proceso_5() {
 	y = 0;
 	while (1) {
 		lee_teclado();
-		if (!is_empty(TECLADO)) {
+		if (!is_empty(&teclado)) {
 			disable();
 			/*set_viewport(3);
 			 outtextxy(10, 10, "aoesuth");*/
-			c = obtener_primero(TECLADO);
+			c = obtener_primero(&teclado);
 			set_viewport(3);
 			if (c == BACKSPACE_KEY) {
 				x--;
