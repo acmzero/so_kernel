@@ -45,3 +45,19 @@ void interrupt timer_handler_new() {
 	timer_handler_old();
 	enable();
 }
+void increase_timer_freq(void) {
+	int countdown;
+	countdown = 0x8000;
+	asm {
+
+		cli;
+		mov al, 00110110b;
+		out 43h, al;
+		mov cx, countdown;
+		mov al, cl;
+		out 40h, al;
+		mov al, ch;
+		out 40h, al;
+		sti;
+	}
+}

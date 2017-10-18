@@ -19,6 +19,7 @@ int main(void) {
 	timer_handler_old = getvect(TIMER_INT);
 
 	setvect(TIMER_INT, timer_handler_new);
+//	increase_timer_freq();
 
 	while (true) {
 		if (esc_pressed) {
