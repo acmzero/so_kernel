@@ -45,7 +45,7 @@ void lee_teclado() {
 			esc_pressed = true;
 		} else {
 			has_key = true;
-			inserta(key_c, &teclado);
+			enqueue(key_c, &teclado);
 		}
 	}
 }
@@ -69,4 +69,16 @@ void inicializa_pantalla() {
 	set_off_point(1, m_x, 1, x, m_y);
 	set_off_point(2, 0, m_y + 1, m_x, y);
 	set_off_point(3, m_x, m_y + 1, x, y);
+}
+
+void print_line_old(int vp, int x, int y, char *ss) {
+	print_line(vp, x, y, ss, WHITE);
+}
+
+void print_line(int vp, int x, int y, char *ss, int col) {
+	disable();
+	set_viewport(vp);
+	setcolor(col);
+	outtextxy(x, y, ss);
+	enable();
 }

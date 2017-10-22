@@ -9,6 +9,8 @@
 #include"mancolas.h"
 #include"mancpu.h"
 
+#define DEFAULT_PRIORITY 0
+
 PCB pcbs[PCBS_SIZE];
 int pcb_count = 1;
 void activa(void (*jobptr), char *name) {
@@ -16,6 +18,7 @@ void activa(void (*jobptr), char *name) {
 	pcbs[pcb_count].id = pcb_count;
 	pcbs[pcb_count].state = READY;
 	pcbs[pcb_count].name = name;
+	pcbs[pcb_count].priority = DEFAULT_PRIORITY;
 	pcbs[pcb_count].ss=FP_SEG((regs far *) ct);
 	pcbs[pcb_count].sp=FP_OFF((regs far *) ct);
 
@@ -24,14 +27,20 @@ void activa(void (*jobptr), char *name) {
 	ct->cs = FP_SEG(jobptr);
 	ct->ip = FP_OFF(jobptr);
 	ct->flags = 0x200;
-	inserta(pcb_count, &listos);
+	inserta(pcb_count);
 	pcb_count++;
 }
 
 void elimina() {
-	sacar(running_pcb, &listos);
+	sacar(running_pcb);
 	pcbs[running_pcb].state = TERMINATED;
 	timer_handler_new();
 }
 
+void retrasa(int time) {
+//	int tiempo_retrasa = time;
+	sacar(running_pcb);
+	pcbs[running_pcb].state = WAITING;
+	mete_cola_retrasa(time);
+}
 

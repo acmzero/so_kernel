@@ -7,6 +7,7 @@
 #include<GRAPHICS.H>
 #include<DOS.H>
 #include"libs.h"
+#include"pripro.h"
 
 /* mostrar mensaje random */
 char *str_m;
@@ -16,6 +17,7 @@ void proceso_4() {
 	int c_sec = -1;
 	struct time t;
 	int count, n;
+	retrasa(200);
 	while (1) {
 		lee_teclado();
 		gettime(&t);

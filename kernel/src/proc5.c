@@ -10,6 +10,7 @@
 #include"datos.h"
 #include"libs.h"
 #include"mancolas.h"
+#include"pripro.h"
 
 #define ENTER_KEY 0xD
 #define BACKSPACE_KEY 0x8
@@ -22,13 +23,14 @@ void proceso_5() {
 	int first_done = 0;
 	x = 0;
 	y = 0;
+//	retrasa(10000);
 	while (1) {
 		lee_teclado();
 		if (!is_empty(&teclado)) {
 			disable();
 			/*set_viewport(3);
 			 outtextxy(10, 10, "aoesuth");*/
-			c = obtener_primero(&teclado);
+			c = dequeue(&teclado);
 			set_viewport(3);
 			if (c == BACKSPACE_KEY) {
 				x--;
