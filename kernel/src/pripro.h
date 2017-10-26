@@ -7,7 +7,7 @@
 #ifndef PRIPRO_H_
 #define PRIPRO_H_
 
-#define STACK_SIZE 2048
+#define STACK_SIZE 4096
 #define PCBS_SIZE 10
 
 #define MAX_PRIORITY 5
@@ -35,6 +35,7 @@ typedef void (*jobptr)();
 extern void activa(void (*jobptr), char *);
 extern void elimina();
 extern void retrasa(int time);
+extern void  procesa_retrasa(void);
 
 extern PCB pcbs[];
 extern int running_pcb;

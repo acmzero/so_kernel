@@ -3,50 +3,43 @@
  */
 #include"llist.h"
 #include"libs.h"
+#include<ALLOC.H>
 
 list_node *new_list_node(int id, int val) {
 	list_node *n;
 	n = (list_node*) malloc(sizeof(list_node));
 	n->id = id;
 	n->value = val;
-	n->prev = NULL_ENTRY;
-	n->next = NULL_ENTRY;
+	n->next = NULL;
 	return n;
 }
 list_node* remove_head(l_list *l) {
 	list_node *x;
-	if (l->size > 0) {
+	if (l->head != NULL) {
 		x = l->head;
-		l->head = l->head->next;
-		l->head->prev = NULL_ENTRY;
-		l->size--;
+		l->head = x->next;
 	} else {
-		x = NULL_ENTRY;
+		x = NULL;
 	}
 	return x;
 }
-void insert_head(int id, int val, l_list *l) {
+void add_first(int id, int val, l_list *l) {
 	list_node *n = new_list_node(id, val);
-	if (l->size > 0) {
-		n->next = l->head;
-		l->head->prev = n;
-	} else {
-		l->tail = n;
-	}
+	n->next = l->head;
 	l->head = n;
-	l->size++;
 }
-void insert_tail(int id, int val, l_list *l) {
+void add_last(int id, int val, l_list *l) {
+	list_node *e;
 	list_node *n = new_list_node(id, val);
-	if (l->size > 0) {
-		l->tail->next = n;
-		n->prev = l->tail;
-	} else {
+	if (l->head == NULL) {
 		l->head = n;
+		return;
 	}
-	n->next = NULL_ENTRY;
-	l->tail = n;
-	l->size++;
+	e = l->head;
+	while (e->next != NULL) {
+		e = e->next;
+	}
+	e->next = n;
 }
 
 char str_plist[50];
@@ -54,11 +47,11 @@ void print_list(l_list *l) {
 	//prints only next 3 items
 	list_node *p, *s, *t;
 	print_line(2, 10, 50, str_plist, BLACK);
-	if (l->size > 0) {
+	if (l->head != NULL) {
 		p = l->head;
-		if (p->next != NULL_ENTRY) {
+		if (p->next != NULL) {
 			s = p->next;
-			if (s->next != NULL_ENTRY) {
+			if (s->next != NULL) {
 				t = s->next;
 			}
 		}
@@ -68,8 +61,3 @@ void print_list(l_list *l) {
 	print_line(2, 10, 50, str_plist, WHITE);
 }
 
-void init_list(l_list *l){
-	l->head = NULL_ENTRY;
-	l->tail = NULL_ENTRY;
-	l->size = 0;
-}

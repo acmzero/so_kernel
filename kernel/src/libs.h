@@ -4,11 +4,11 @@
  *      Author: Heli Villarreal, Roberto Mieres
  */
 
+#ifndef LIBS_H_
+#define LIBS_H_
 #include"datos.h"
 #include"mancolas.h"
 #include<GRAPHICS.H>
-#ifndef LIBS_H_
-#define LIBS_H_
 
 
 typedef struct {
@@ -32,7 +32,7 @@ extern char key_c;
 extern int MAX_X, MAX_Y;
 extern int MID_X, MID_Y;
 
-extern bool graphics_itinialized;
+extern bool graphics_initialized;
 
 extern queue teclado;
 extern bool teclado_inicializado;

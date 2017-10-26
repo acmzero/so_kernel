@@ -15,7 +15,7 @@ bool esc_pressed = false;
 char key_c;
 int MAX_X = 0, MAX_Y = 0;
 int MID_X = 0, MID_Y = 0;
-bool graphics_itinialized = false;
+bool graphics_initialized = false;
 point off_points[5];
 queue teclado;
 /* cambia el offset de impresion de pantalla por alguno de los cuadros */
@@ -54,7 +54,7 @@ void inicializa_pantalla() {
 	int gd = DETECT, gm;
 	int x, y, m_x, m_y;
 	initgraph(&gd, &gm, "c:\\turboc3\\bgi");
-	graphics_itinialized = true;
+	graphics_initialized = true;
 	x = getmaxx();
 	y = getmaxy();
 	MAX_X = x;
