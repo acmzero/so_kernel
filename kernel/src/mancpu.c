@@ -13,6 +13,7 @@ bool first_run = false;
 int torun;
 PCB main_pp;
 int running_pcb;
+int tiempo_retrasa = -1;
 void interrupt(*timer_handler_old)
 (void);
 /* nuevo interrupt handler del timer */
@@ -32,7 +33,10 @@ void interrupt timer_handler_new() {
 		inserta(main_pp.id);
 	}
 	if(graphics_initialized) {
-		procesa_retrasa();
+		tiempo_retrasa--;
+		if(tiempo_retrasa==0) {
+			procesa_retrasa();
+		}
 	}
 	sacar(running_pcb);
 	if (first_run && pcbs[running_pcb].state == RUNNING) {
@@ -57,13 +61,17 @@ void increase_timer_freq(void) {
 	asm {
 
 		cli;
-		mov al, 00110110b;
-		out 43h, al;
+		mov
+		al, 00110110b;
+		out
+		43h, al;
 		mov cx, countdown;
 		mov al, cl;
-		out 40h, al;
+		out
+		40h, al;
 		mov al, ch;
-		out 40h, al;
+		out
+		40h, al;
 		sti;
 	}
 }

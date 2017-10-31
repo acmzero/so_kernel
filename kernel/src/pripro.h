@@ -40,5 +40,6 @@ extern void  procesa_retrasa(void);
 extern PCB pcbs[];
 extern int running_pcb;
 extern int pcb_count;
+extern int tiempo_retrasa;
 
 #endif /* PRIPRO_H_ */
