@@ -41,7 +41,7 @@ void elimina() {
 }
 
 void retrasa(int time) {
-	if (tiempo_retrasa < 0) {
+	if(tiempo_retrasa < 0){
 		tiempo_retrasa = time;
 	}
 	sacar(running_pcb);
@@ -50,33 +50,3 @@ void retrasa(int time) {
 	timer_handler_new();
 }
 
-char str_retrasa[40];
-int y_off = 10;
-void procesa_retrasa() {
-	list_node *e;
-	if (!cola_retrasa_initialized || lista_retrasa->head == NULL) {
-		print_line(2, 10, 40, str_retrasa, BLACK);
-		return;
-	}
-	print_line(2, 10, 40, str_retrasa, BLACK);
-	sprintf(str_retrasa, "Retrasa actual %s id/tiempo %d/%d",
-			pcbs[lista_retrasa->head->id].name, lista_retrasa->head->id,
-			lista_retrasa->head->value);
-	print_line(2, 10, 40, str_retrasa, WHITE);
-//	print_list(lista_retrasa);
-	if (tiempo_retrasa == 0) {
-		e = remove_head(lista_retrasa);
-		while (e != NULL && e->value == 0) {
-			inserta(e->id);
-			if (e->next == NULL || e->next->value > 0) {
-				if (e->next != NULL) {
-					tiempo_retrasa = e->next->value;
-				}
-				free(e);
-				break;
-			}
-			free(e);
-			e = remove_head(lista_retrasa);
-		}
-	}
-}

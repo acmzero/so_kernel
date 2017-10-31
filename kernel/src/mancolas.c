@@ -56,6 +56,7 @@ void mete_cola_retrasa(int time) {
 	}
 	if (lista_retrasa->head == NULL) {
 		add_first(running_pcb, time, lista_retrasa);
+		print_list(lista_retrasa);
 		return;
 	} else {
 		e = lista_retrasa->head;
@@ -69,6 +70,7 @@ void mete_cola_retrasa(int time) {
 				n->value = 0;
 				n->next = e->next;
 				e->next = n;
+				print_list(lista_retrasa);
 				return;
 			} else if (time < time_count) {
 				//inserta a la izquierda
@@ -83,12 +85,31 @@ void mete_cola_retrasa(int time) {
 					e->value = e->value - n->value;
 					prev->next = n;
 				}
+				print_list(lista_retrasa);
 				return;
 			}
 			prev = e;
 			e = e->next;
 		}
 		add_last(running_pcb, time - time_count, lista_retrasa);
+		print_list(lista_retrasa);
 	}
 
+}
+
+void saca_retrasa() {
+	list_node *e;
+	e = lista_retrasa->head;
+	lista_retrasa->head = e->next;
+	print_list(lista_retrasa);
+	inserta(e->id);
+	while (e->next != NULL && e->next->value == 0) {
+		inserta(e->id);
+		e = lista_retrasa->head;
+		lista_retrasa->head = e->next;
+		print_list(lista_retrasa);
+	}
+	if (e->next != NULL && e->next->value > 0) {
+		tiempo_retrasa = e->next->value;
+	}
 }

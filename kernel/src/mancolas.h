@@ -20,6 +20,7 @@ extern void inserta(int n);
 extern void sacar(int n);
 extern int obtener_primero();
 extern void mete_cola_retrasa(int time);
+extern void saca_retrasa();
 
 extern queue listos[];
 extern l_list *lista_retrasa;

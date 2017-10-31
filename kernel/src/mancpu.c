@@ -16,6 +16,7 @@ int running_pcb;
 int tiempo_retrasa = -1;
 void interrupt(*timer_handler_old)
 (void);
+char str_retrasa[40];
 /* nuevo interrupt handler del timer */
 void interrupt timer_handler_new() {
 	disable();
@@ -33,9 +34,14 @@ void interrupt timer_handler_new() {
 		inserta(main_pp.id);
 	}
 	if(graphics_initialized) {
+		print_line(2, 10, 40, str_retrasa, BLACK);
 		tiempo_retrasa--;
+		if(tiempo_retrasa>0) {
+			sprintf(str_retrasa, "Tiempo Retrasa actual %d ", tiempo_retrasa);
+			print_line(2, 10, 40, str_retrasa, WHITE);
+		}
 		if(tiempo_retrasa==0) {
-			procesa_retrasa();
+			saca_retrasa();
 		}
 	}
 	sacar(running_pcb);
@@ -61,17 +67,13 @@ void increase_timer_freq(void) {
 	asm {
 
 		cli;
-		mov
-		al, 00110110b;
-		out
-		43h, al;
+		mov al, 00110110b;
+		out 43h, al;
 		mov cx, countdown;
 		mov al, cl;
-		out
-		40h, al;
+		out 40h, al;
 		mov al, ch;
-		out
-		40h, al;
+		out 40h, al;
 		sti;
 	}
 }

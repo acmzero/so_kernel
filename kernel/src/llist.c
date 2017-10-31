@@ -43,21 +43,43 @@ void add_last(int id, int val, l_list *l) {
 }
 
 char str_plist[50];
+int lista_print_y = 50;
 void print_list(l_list *l) {
 	//prints only next 3 items
-	list_node *p, *s, *t;
-	print_line(2, 10, 50, str_plist, BLACK);
+	list_node *p, *s, *t, *u, *v;
+	p = s = t = u = v = NULL;
+//	print_line(2, 10, lista_print_y, str_plist, BLACK);
 	if (l->head != NULL) {
 		p = l->head;
 		if (p->next != NULL) {
 			s = p->next;
 			if (s->next != NULL) {
 				t = s->next;
+				if (t->next != NULL) {
+					u = t->next;
+					if (u->next != NULL) {
+						v = u->next;
+					}
+				}
 			}
 		}
 	}
-	sprintf(str_plist, "First 3 items %d/%d->%d/%d->%d/%d", p->id, p->value,
-			s->id, s->value, t->id, t->value);
-	print_line(2, 10, 50, str_plist, WHITE);
+	if (p == NULL) {
+		sprintf(str_plist, "->NULL");
+	} else if (p != NULL && s == NULL) {
+		sprintf(str_plist, "->%d/%d->NULL", p->id, p->value);
+	} else if (s != NULL && t == NULL) {
+		sprintf(str_plist, "->%d/%d->%d/%d->NULL", p->id, p->value, s->id,
+				s->value);
+	} else if (t != NULL && u == NULL) {
+		sprintf(str_plist, "->%d/%d->%d/%d->%d/%d->NULL", p->id, p->value,
+				s->id, s->value, t->id, t->value);
+	} else if (u != NULL && v == NULL) {
+		sprintf(str_plist, "->%d/%d->%d/%d->%d/%d->%d/%d->NULL", p->id,
+				p->value, s->id, s->value, t->id, t->value, u->id, u->value);
+
+	}
+	print_line(2, 10, lista_print_y, str_plist, WHITE);
+	lista_print_y += 10;
 }
 
