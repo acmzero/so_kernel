@@ -55,7 +55,12 @@ void mete_cola_retrasa(int time) {
 		cola_retrasa_initialized = true;
 	}
 	if (lista_retrasa->head == NULL) {
-		add_first(running_pcb, time, lista_retrasa);
+		n = malloc(sizeof(list_node));
+		n->id = running_pcb;
+		n->value = time;
+		n->next = NULL;
+		lista_retrasa->head = n;
+//		add_first(running_pcb, time, lista_retrasa);
 		print_list(lista_retrasa);
 		return;
 	} else {
@@ -102,11 +107,13 @@ void saca_retrasa() {
 	e = lista_retrasa->head;
 	lista_retrasa->head = e->next;
 	print_list(lista_retrasa);
-	inserta(e->id);
-	while (e->next != NULL && e->next->value == 0) {
+	if (e != NULL) {
 		inserta(e->id);
+	}
+	while (e->next != NULL && e->next->value == 0) {
 		e = lista_retrasa->head;
 		lista_retrasa->head = e->next;
+		inserta(e->id);
 		print_list(lista_retrasa);
 	}
 	if (e->next != NULL && e->next->value > 0) {

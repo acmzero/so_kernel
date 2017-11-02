@@ -41,7 +41,7 @@ void elimina() {
 }
 
 void retrasa(int time) {
-	if(tiempo_retrasa < 0){
+	if (tiempo_retrasa < 0 || time < tiempo_retrasa) {
 		tiempo_retrasa = time;
 	}
 	sacar(running_pcb);

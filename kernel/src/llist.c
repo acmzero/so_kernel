@@ -67,16 +67,18 @@ void print_list(l_list *l) {
 	if (p == NULL) {
 		sprintf(str_plist, "->NULL");
 	} else if (p != NULL && s == NULL) {
-		sprintf(str_plist, "->%d/%d->NULL", p->id, p->value);
+		sprintf(str_plist, "->%s/%d->NULL", pcbs[p->id].name, p->value);
 	} else if (s != NULL && t == NULL) {
-		sprintf(str_plist, "->%d/%d->%d/%d->NULL", p->id, p->value, s->id,
-				s->value);
+		sprintf(str_plist, "->%s/%d->%s/%d->NULL", pcbs[p->id].name, p->value,
+				pcbs[s->id].name, s->value);
 	} else if (t != NULL && u == NULL) {
-		sprintf(str_plist, "->%d/%d->%d/%d->%d/%d->NULL", p->id, p->value,
-				s->id, s->value, t->id, t->value);
+		sprintf(str_plist, "->%s/%d->%s/%d->%s/%d->NULL", pcbs[p->id].name,
+				p->value, pcbs[s->id].name, s->value, pcbs[t->id].name,
+				t->value);
 	} else if (u != NULL && v == NULL) {
-		sprintf(str_plist, "->%d/%d->%d/%d->%d/%d->%d/%d->NULL", p->id,
-				p->value, s->id, s->value, t->id, t->value, u->id, u->value);
+		sprintf(str_plist, "->%s/%d->%s/%d->%s/%d->%s/%d->NULL",
+				pcbs[p->id].name, p->value, pcbs[s->id].name, s->value,
+				pcbs[t->id].name, t->value, pcbs[u->id].name, u->value);
 
 	}
 	print_line(2, 10, lista_print_y, str_plist, WHITE);
