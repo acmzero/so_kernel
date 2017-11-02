@@ -37,10 +37,4 @@ void elimina() {
 	timer_handler_new();
 }
 
-void retrasa(int time) {
-//	int tiempo_retrasa = time;
-	sacar(running_pcb);
-	pcbs[running_pcb].state = WAITING;
-	mete_cola_retrasa(time);
-}
 

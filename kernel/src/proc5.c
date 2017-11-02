@@ -23,7 +23,6 @@ void proceso_5() {
 	int first_done = 0;
 	x = 0;
 	y = 0;
-//	retrasa(10000);
 	while (1) {
 		lee_teclado();
 		if (!is_empty(&teclado)) {

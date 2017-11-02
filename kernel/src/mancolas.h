@@ -6,7 +6,6 @@
 #include"datos.h"
 #include"pripro.h"
 #include"queue.h"
-#include"llist.h"
 
 #ifndef MANCOLAS_H_
 #define MANCOLAS_H_
@@ -21,6 +20,5 @@ extern int obtener_primero();
 extern void mete_cola_retrasa(int time);
 
 extern queue listos[];
-extern l_list lista_retrasa;
 
 #endif /* MANCOLAS_H_ */

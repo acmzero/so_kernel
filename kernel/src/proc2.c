@@ -113,7 +113,6 @@ void proceso_2() {
 	limit.x = MID_X - 7;
 	limit.y = MID_Y - 7;
 	inicializa_ball(0);
-	retrasa(100);
 	while (1) {
 		lee_teclado();
 		move_ball(0, limit, true);

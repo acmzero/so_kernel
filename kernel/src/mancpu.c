@@ -31,7 +31,6 @@ void interrupt timer_handler_new() {
 		pcb_count++;
 		inserta(main_pp.id);
 	}
-	procesa_retrasa();
 	sacar(running_pcb);
 	if (first_run && pcbs[running_pcb].state == RUNNING) {
 		inserta(running_pcb);
@@ -70,28 +69,3 @@ void increase_timer_freq(void) {
 //	}
 }
 
-char str_retrasa[40];
-void procesa_retrasa() {
-	list_node *e;
-	if (lista_retrasa.size == 0) {
-		return;
-	}
-	lista_retrasa.head->value--;
-	print_line(2, 10, 40, str_retrasa, BLACK);
-	sprintf(str_retrasa, "Retrasa actual %s id/tiempo %d/%d",
-			pcbs[lista_retrasa.head->id].name, lista_retrasa.head->id,
-			lista_retrasa.head->value);
-	print_line(2, 10, 40, str_retrasa, WHITE);
-	print_list(&lista_retrasa);
-	if (lista_retrasa.head->value <= 0) {
-		e = remove_head(&lista_retrasa);
-		while (e > 0 && e->value == 0) {
-			inserta(e->id);
-			if (e->next < 0 || e->next->value > 0) {
-				break;
-			}
-			free(e);
-			e = remove_head(&lista_retrasa);
-		}
-	}
-}

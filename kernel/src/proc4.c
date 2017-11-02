@@ -17,7 +17,6 @@ void proceso_4() {
 	int c_sec = -1;
 	struct time t;
 	int count, n;
-	retrasa(200);
 	while (1) {
 		lee_teclado();
 		gettime(&t);
