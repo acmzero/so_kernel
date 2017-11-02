@@ -32,11 +32,9 @@ void interrupt timer_handler_new() {
 		pcb_count++;
 		inserta(main_pp.id);
 	}
-	if(retrasa_head !=NULL) {
-		retrasa_head->time--;
-		if(retrasa_head->time==0) {
-			saca_retrasa();
-		}
+	tiempo_retrasa--;
+	if(tiempo_retrasa==0) {
+		saca_retrasa();
 	}
 	sacar(running_pcb);
 	if (first_run && pcbs[running_pcb].state == RUNNING) {

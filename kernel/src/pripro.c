@@ -39,6 +39,9 @@ void elimina() {
 
 char str_log_pripro[40];
 void retrasa(int time) {
+	if (tiempo_retrasa > time) {
+		tiempo_retrasa = time;
+	}
 	sprintf(str_log_pripro, "[inserting] %s %d\n", pcbs[running_pcb].name,
 			time);
 	log_line(str_log_pripro);

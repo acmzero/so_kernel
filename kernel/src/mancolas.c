@@ -12,6 +12,8 @@
 #endif
 
 queue listos[MAX_PRIORITY];
+
+int tiempo_retrasa = -1;
 RetrasaListNode retrasa_head;
 
 void inserta(int n) {
@@ -47,6 +49,7 @@ void inicializa_colas() {
 		init_queue(&listos[i]);
 	}
 }
+
 char str_to_log[50];
 void log_lista_retrasa() {
 	RetrasaListNode e;
@@ -60,17 +63,25 @@ void log_lista_retrasa() {
 	log_line("->NULL\n");
 	log_line("->end\n");
 }
+
 void saca_retrasa() {
 	RetrasaListNode h = retrasa_head;
 	log_line("saca_retrasa\n");
 	if (h != NULL) {
 		retrasa_head = h->next;
+		actualizaTiempoRetrasa();
 		inserta(h->id);
 		free(h);
 		log_lista_retrasa();
 		if (retrasa_head != NULL && retrasa_head->time == 0) {
 			saca_retrasa();
 		}
+	}
+}
+
+void actualizaTiempoRetrasa() {
+	if (retrasa_head != NULL) {
+		tiempo_retrasa = retrasa_head->time;
 	}
 }
 
@@ -95,6 +106,7 @@ void mete_cola_retrasa(int time) {
 				retrasa_head = createNode(running_pcb, time);
 				retrasa_head->next = e;
 				e->time = e->time - time;
+				actualizaTiempoRetrasa();
 				log_lista_retrasa();
 			} else {
 				log_line("Inserting right time < sum_time \n");
@@ -110,6 +122,7 @@ void mete_cola_retrasa(int time) {
 	if (prev == NULL) {
 		log_line("Inserting head \n");
 		retrasa_head = createNode(running_pcb, time);
+		actualizaTiempoRetrasa();
 		log_lista_retrasa();
 	} else {
 		log_line("Inserting right time - sum_time \n");

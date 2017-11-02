@@ -30,6 +30,9 @@ extern RetrasaListNode createNode(int id, int t);
 extern void insertRight(RetrasaListNode prev, int p, int t);
 
 extern queue listos[];
+
 extern RetrasaListNode retrasa_head;
+extern int tiempo_retrasa;
+extern void actualizaTiempoRetrasa();
 
 #endif /* MANCOLAS_H_ */
