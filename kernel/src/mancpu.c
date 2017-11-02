@@ -5,6 +5,7 @@
  */
 #include"mancpu.h"
 #include<DOS.H>
+#include<_NULL.H>
 #include"mancolas.h"
 #include"datos.h"
 #include"libs.h"
@@ -30,6 +31,12 @@ void interrupt timer_handler_new() {
 		pcbs[pcb_count] = main_pp;
 		pcb_count++;
 		inserta(main_pp.id);
+	}
+	if(retrasa_head !=NULL) {
+		retrasa_head->time--;
+		if(retrasa_head->time==0) {
+			saca_retrasa();
+		}
 	}
 	sacar(running_pcb);
 	if (first_run && pcbs[running_pcb].state == RUNNING) {

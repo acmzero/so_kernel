@@ -37,4 +37,13 @@ void elimina() {
 	timer_handler_new();
 }
 
-
+char str_log_pripro[40];
+void retrasa(int time) {
+	sprintf(str_log_pripro, "[inserting] %s %d\n", pcbs[running_pcb].name,
+			time);
+	log_line(str_log_pripro);
+	sacar(running_pcb);
+	pcbs[running_pcb].state = DELAYED;
+	mete_cola_retrasa(time + 1);
+	timer_handler_new();
+}

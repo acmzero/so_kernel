@@ -17,7 +17,7 @@ typedef struct {
 } regs;
 
 typedef enum {
-	READY, RUNNING, WAITING, TERMINATED
+	READY, RUNNING, WAITING, TERMINATED, DELAYED
 } PSTATE;
 
 typedef struct {

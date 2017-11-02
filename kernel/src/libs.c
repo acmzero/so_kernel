@@ -9,6 +9,7 @@
 #include"queue.h"
 #include<GRAPHICS.H>
 #include<DOS.H>
+#include<STDIO.H>
 
 bool has_key = false;
 bool esc_pressed = false;
@@ -81,4 +82,13 @@ void print_line(int vp, int x, int y, char *ss, int col) {
 	setcolor(col);
 	outtextxy(x, y, ss);
 	enable();
+}
+bool file_opened = false;
+FILE *log;
+void log_line(char *ss) {
+	if (!file_opened) {
+		log = fopen("log.txt", "w");
+		file_opened = true;
+	}
+	fprintf(log, ss);
 }

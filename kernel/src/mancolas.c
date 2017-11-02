@@ -6,8 +6,13 @@
 #include"mancolas.h"
 #include"libs.h"
 #include<GRAPHICS.H>
+#include<STDLIB.H>
+#ifndef NULL
+#include<_NULL.H>
+#endif
 
 queue listos[MAX_PRIORITY];
+RetrasaListNode retrasa_head;
 
 void inserta(int n) {
 	pcbs[n].state = READY;
@@ -42,4 +47,91 @@ void inicializa_colas() {
 		init_queue(&listos[i]);
 	}
 }
+char str_to_log[50];
+void log_lista_retrasa() {
+	RetrasaListNode e;
+	e = retrasa_head;
+	log_line("->start\n");
+	while (e != NULL) {
+		sprintf(str_to_log, "->%s / %d\n", pcbs[e->id].name, e->time);
+		log_line(str_to_log);
+		e = e->next;
+	}
+	log_line("->NULL\n");
+	log_line("->end\n");
+}
+void saca_retrasa() {
+	RetrasaListNode h = retrasa_head;
+	log_line("saca_retrasa\n");
+	if (h != NULL) {
+		retrasa_head = h->next;
+		inserta(h->id);
+		free(h);
+		log_lista_retrasa();
+		if (retrasa_head != NULL && retrasa_head->time == 0) {
+			saca_retrasa();
+		}
+	}
+}
 
+void mete_cola_retrasa(int time) {
+	int sum_time;
+	RetrasaListNode e, prev;
+
+	e = retrasa_head;
+	prev = NULL;
+	sum_time = 0;
+	while (e != NULL) {
+		sum_time += e->time;
+		if (sum_time == time) {
+			log_line("Inserting right time = 0\n");
+			insertRight(e, running_pcb, 0);
+			log_lista_retrasa();
+			return;
+		}
+		if (time < sum_time) {
+			if (prev == NULL) {
+				log_line("Inserting head prev==NULL \n");
+				retrasa_head = createNode(running_pcb, time);
+				retrasa_head->next = e;
+				e->time = e->time - time;
+				log_lista_retrasa();
+			} else {
+				log_line("Inserting right time < sum_time \n");
+				insertRight(prev, running_pcb, time - prev->time);
+				log_lista_retrasa();
+			}
+			return;
+		}
+
+		prev = e;
+		e = e->next;
+	}
+	if (prev == NULL) {
+		log_line("Inserting head \n");
+		retrasa_head = createNode(running_pcb, time);
+		log_lista_retrasa();
+	} else {
+		log_line("Inserting right time - sum_time \n");
+		insertRight(prev, running_pcb, time - sum_time);
+		log_lista_retrasa();
+	}
+
+}
+void insertRight(RetrasaListNode prev, int p, int t) {
+	RetrasaListNode n = prev->next;
+	prev->next = createNode(p, t);
+	prev->next->next = n;
+	if (n != NULL) {
+		n->time = n->time - t;
+	}
+}
+
+RetrasaListNode createNode(int id, int t) {
+	RetrasaListNode n;
+	n = malloc(sizeof(struct RetrasaNode));
+	n->id = id;
+	n->time = t;
+	n->next = NULL;
+	return n;
+}

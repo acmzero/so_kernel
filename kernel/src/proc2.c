@@ -116,7 +116,7 @@ void proceso_2() {
 	while (1) {
 		lee_teclado();
 		move_ball(0, limit, true);
-		delay(2);
+		retrasa(1);
 	}
 }
 

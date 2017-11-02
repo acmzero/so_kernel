@@ -24,6 +24,7 @@ extern point off_points[];
 extern void lee_teclado();
 extern void inicializa_pantalla();
 extern void print_line(int vp, int x, int y, char *ss, int col);
+extern void log_line(char *ss);
 
 extern bool esc_pressed;
 extern bool has_key;
