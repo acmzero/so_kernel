@@ -38,7 +38,7 @@ void elimina() {
 }
 
 char str_log_pripro[40];
-void retrasa(int time) {
+void retrasa(int time, bool test) {
 	if (tiempo_retrasa > time) {
 		tiempo_retrasa = time;
 	}
@@ -47,6 +47,10 @@ void retrasa(int time) {
 	log_line(str_log_pripro);
 	sacar(running_pcb);
 	pcbs[running_pcb].state = DELAYED;
-	mete_cola_retrasa(time + 1);
-	timer_handler_new();
+	if (!test) {
+		mete_cola_retrasa(time + 1);
+		timer_handler_new();
+	} else {
+		mete_cola_retrasa(time);
+	}
 }

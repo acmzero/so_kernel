@@ -16,6 +16,7 @@ PCB main_pp;
 int running_pcb;
 void interrupt(*timer_handler_old)
 (void);
+char str_retrasa[30];
 /* nuevo interrupt handler del timer */
 void interrupt timer_handler_new() {
 	disable();
@@ -33,6 +34,11 @@ void interrupt timer_handler_new() {
 		inserta(main_pp.id);
 	}
 	tiempo_retrasa--;
+	if(graphics_initialized && tiempo_retrasa>=0) {
+		print_line(2, 10, 50, str_retrasa, BLACK);
+		sprintf(str_retrasa, "Current tiempo_retrasa %d", tiempo_retrasa);
+		print_line(2, 10, 50, str_retrasa, WHITE);
+	}
 	if(tiempo_retrasa==0) {
 		saca_retrasa();
 	}

@@ -33,7 +33,7 @@ extern char key_c;
 extern int MAX_X, MAX_Y;
 extern int MID_X, MID_Y;
 
-extern bool graphics_itinialized;
+extern bool graphics_initialized;
 
 extern queue teclado;
 extern bool teclado_inicializado;

@@ -9,6 +9,7 @@
 
 #define STACK_SIZE 2048
 #define PCBS_SIZE 10
+#include"datos.h"
 
 #define MAX_PRIORITY 5
 
@@ -34,7 +35,7 @@ typedef void (*jobptr)();
 
 extern void activa(void (*jobptr), char *);
 extern void elimina();
-extern void retrasa(int time);
+extern void retrasa(int time, bool test);
 
 extern PCB pcbs[];
 extern int running_pcb;
