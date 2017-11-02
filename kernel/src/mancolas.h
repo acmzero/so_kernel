@@ -3,17 +3,22 @@
  *
  *      Author: Heli Villarreal, Roberto Mieres
  */
-
-#ifndef MANCOLAS_H_
-#define MANCOLAS_H_
 #include"datos.h"
 #include"pripro.h"
 #include"queue.h"
-#include"llist.h"
-#include<DOS.H>
+
+#ifndef MANCOLAS_H_
+#define MANCOLAS_H_
 
 #define NULL_ENTRY -1
 #define COLAS_SIZE 5
+
+struct RetrasaNode {
+	int id, time;
+	struct RetrasaNode *next;
+};
+
+typedef struct RetrasaNode *RetrasaListNode;
 
 extern void inicializa_colas();
 extern void inserta(int n);
@@ -21,9 +26,14 @@ extern void sacar(int n);
 extern int obtener_primero();
 extern void mete_cola_retrasa(int time);
 extern void saca_retrasa();
+extern RetrasaListNode createNode(int id, int t);
+extern void insertRight(RetrasaListNode prev, int p, int t);
+extern void print_retrasa_list();
 
 extern queue listos[];
-extern l_list *lista_retrasa;
-extern bool cola_retrasa_initialized;
+
+extern RetrasaListNode retrasa_head;
+extern int tiempo_retrasa;
+extern void actualizaTiempoRetrasa();
 
 #endif /* MANCOLAS_H_ */

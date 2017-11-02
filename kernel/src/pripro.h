@@ -7,8 +7,9 @@
 #ifndef PRIPRO_H_
 #define PRIPRO_H_
 
-#define STACK_SIZE 4096
+#define STACK_SIZE 2048
 #define PCBS_SIZE 10
+#include"datos.h"
 
 #define MAX_PRIORITY 5
 
@@ -17,7 +18,7 @@ typedef struct {
 } regs;
 
 typedef enum {
-	READY, RUNNING, WAITING, TERMINATED
+	READY, RUNNING, WAITING, TERMINATED, DELAYED
 } PSTATE;
 
 typedef struct {
@@ -34,12 +35,10 @@ typedef void (*jobptr)();
 
 extern void activa(void (*jobptr), char *);
 extern void elimina();
-extern void retrasa(int time);
-extern void  procesa_retrasa(void);
+extern void retrasa(int time, bool test);
 
 extern PCB pcbs[];
 extern int running_pcb;
 extern int pcb_count;
-extern int tiempo_retrasa;
 
 #endif /* PRIPRO_H_ */

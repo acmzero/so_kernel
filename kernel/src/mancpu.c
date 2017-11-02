@@ -5,6 +5,7 @@
  */
 #include"mancpu.h"
 #include<DOS.H>
+#include<_NULL.H>
 #include"mancolas.h"
 #include"datos.h"
 #include"libs.h"
@@ -13,10 +14,9 @@ bool first_run = false;
 int torun;
 PCB main_pp;
 int running_pcb;
-int tiempo_retrasa = -1;
 void interrupt(*timer_handler_old)
 (void);
-char str_retrasa[40];
+char str_retrasa[30];
 /* nuevo interrupt handler del timer */
 void interrupt timer_handler_new() {
 	disable();
@@ -33,16 +33,14 @@ void interrupt timer_handler_new() {
 		pcb_count++;
 		inserta(main_pp.id);
 	}
-	if(graphics_initialized) {
-		print_line(2, 10, 40, str_retrasa, BLACK);
-		tiempo_retrasa--;
-		if(tiempo_retrasa>0) {
-			sprintf(str_retrasa, "Tiempo Retrasa actual %d ", tiempo_retrasa);
-			print_line(2, 10, 40, str_retrasa, WHITE);
-		}
-		if(tiempo_retrasa==0) {
-			saca_retrasa();
-		}
+	tiempo_retrasa--;
+	if(graphics_initialized && tiempo_retrasa>=0) {
+		print_line(2, 10, 50, str_retrasa, BLACK);
+		sprintf(str_retrasa, "Current tiempo_retrasa %d", tiempo_retrasa);
+		print_line(2, 10, 50, str_retrasa, WHITE);
+	}
+	if(tiempo_retrasa==0) {
+		saca_retrasa();
 	}
 	sacar(running_pcb);
 	if (first_run && pcbs[running_pcb].state == RUNNING) {
@@ -62,19 +60,23 @@ void interrupt timer_handler_new() {
 }
 
 void increase_timer_freq(void) {
-	int countdown;
-	countdown = 0x1000;
-	asm {
-
-		cli;
-		mov al, 00110110b;
-		out 43h, al;
-		mov cx, countdown;
-		mov al, cl;
-		out 40h, al;
-		mov al, ch;
-		out 40h, al;
-		sti;
-	}
+//	int countdown;
+//	countdown = 0x1000;
+//	asm {
+//
+//		cli;
+//		mov
+//		al, 00110110b;
+//		out
+//		43h, al;
+//		mov cx, countdown;
+//		mov al, cl;
+//		out
+//		40h, al;
+//		mov al, ch;
+//		out
+//		40h, al;
+//		sti;
+//	}
 }
 

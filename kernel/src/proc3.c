@@ -14,7 +14,7 @@ void proceso_3() {
 	char f_time[30];
 	struct time t;
 	int x, y;
-	retrasa(500);
+	retrasa(50, false);
 	while (1) {
 		lee_teclado();
 		gettime(&t);

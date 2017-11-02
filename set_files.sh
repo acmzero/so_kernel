@@ -20,6 +20,7 @@ ln -s ../../../.././kernel/src/proc2.c    dosbox/dos/TURBOC3/SOURCE/PROC2.C
 ln -s ../../../.././kernel/src/pripro.c   dosbox/dos/TURBOC3/SOURCE/PRIPRO.C
 ln -s ../../../.././kernel/src/queue.c dosbox/dos/TURBOC3/SOURCE/QUEUE.C
 ln -s ../../../.././kernel/src/llist.c dosbox/dos/TURBOC3/SOURCE/LLIST.C
+ln -s ../../../.././kernel/src/retrasat.c dosbox/dos/TURBOC3/SOURCE/RETRASAT.C
 
 ln -s ../../../.././kernel/KERNEL.DSK   dosbox/dos/TURBOC3/SOURCE/KERNEL.DSK
 ln -s ../../../.././kernel/KERNEL.PRJ   dosbox/dos/TURBOC3/SOURCE/KERNEL.PRJ

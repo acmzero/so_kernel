@@ -5,12 +5,9 @@
  */
 #include"pripro.h"
 #include<DOS.H>
-#include<ALLOC.H>
 #include"datos.h"
 #include"mancolas.h"
 #include"mancpu.h"
-#include"libs.h"
-#include"llist.h"
 
 #define DEFAULT_PRIORITY 0
 
@@ -40,13 +37,20 @@ void elimina() {
 	timer_handler_new();
 }
 
-void retrasa(int time) {
-	if (tiempo_retrasa < 0 || time < tiempo_retrasa) {
+char str_log_pripro[40];
+void retrasa(int time, bool test) {
+	if (tiempo_retrasa > time) {
 		tiempo_retrasa = time;
 	}
+	sprintf(str_log_pripro, "[inserting] %s %d\n", pcbs[running_pcb].name,
+			time);
+	log_line(str_log_pripro);
 	sacar(running_pcb);
-	pcbs[running_pcb].state = WAITING;
-	mete_cola_retrasa(time);
-	timer_handler_new();
+	pcbs[running_pcb].state = DELAYED;
+	if (!test) {
+		mete_cola_retrasa(time + 1);
+		timer_handler_new();
+	} else {
+		mete_cola_retrasa(time);
+	}
 }
-
