@@ -149,13 +149,3 @@ RetrasaListNode createNode(int id, int t) {
 	return n;
 }
 
-void print_retrasa_list() {
-	RetrasaListNode e;
-	e = retrasa_head;
-	while (e != NULL) {
-		printf(" -> [%d/%d]", e->id, e->time);
-		e = e->next;
-	}
-	printf("-> NULL\n");
-
-}

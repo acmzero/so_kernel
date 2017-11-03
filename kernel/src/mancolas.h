@@ -28,7 +28,6 @@ extern void mete_cola_retrasa(int time);
 extern void saca_retrasa();
 extern RetrasaListNode createNode(int id, int t);
 extern void insertRight(RetrasaListNode prev, int p, int t);
-extern void print_retrasa_list();
 
 extern queue listos[];
 

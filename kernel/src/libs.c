@@ -10,6 +10,8 @@
 #include<GRAPHICS.H>
 #include<DOS.H>
 #include<STDIO.H>
+#include<_NULL.H>
+#include"mancolas.h"
 
 bool has_key = false;
 bool esc_pressed = false;
@@ -91,4 +93,14 @@ void log_line(char *ss) {
 		file_opened = true;
 	}
 	fprintf(log, ss);
+}
+void print_retrasa_list() {
+	RetrasaListNode e;
+	e = retrasa_head;
+	while (e != NULL) {
+		printf(" -> [%d/%d]", e->id, e->time);
+		e = e->next;
+	}
+	printf("-> NULL\n");
+
 }

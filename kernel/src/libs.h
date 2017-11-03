@@ -25,6 +25,7 @@ extern void lee_teclado();
 extern void inicializa_pantalla();
 extern void print_line(int vp, int x, int y, char *ss, int col);
 extern void log_line(char *ss);
+extern void print_retrasa_list();
 
 extern bool esc_pressed;
 extern bool has_key;
